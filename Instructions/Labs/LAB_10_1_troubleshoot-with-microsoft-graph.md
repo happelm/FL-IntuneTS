@@ -13,7 +13,7 @@ lab:
 
 **Why:** The Intune admin center spreads these answers over many pages, and some it does not show at all: the Entra object behind a device, nested group memberships, every change of the day in one list. Graph returns them in one call each – and a call you built once becomes a script.
 
-Open Graph Explorer (`https://aka.ms/ge`) and sign in with your user `etcX`. The method (GET, POST, …) is a drop-down left of the URL box: set it there, clear the URL box and paste only the URL from the code blocks below. Replace the values in `{braces}`.
+Open Graph Explorer (`https://aka.ms/ge`) and sign in with your user `studentX`. The method (GET, POST, …) is a drop-down left of the URL box: set it there, clear the URL box and paste only the URL from the code blocks below. Replace the values in `{braces}`.
 
 ### Part A – Which device, which objects
 

@@ -13,9 +13,9 @@ lab:
 
 **Why:** Intune has no repair action for Win32 apps. For a required app, Reinstall in the Company Portal does nothing while detection is positive, and Uninstall is not passed to the device. The lever that remains is the detection rule: remove what detection looks for, and the IME installs the app again.
 
-1. CL3: note the date of `C:\Windows\CMTrace.exe` – the detection file of `etcX-CMTrace` from Lab 5.1.
+1. CL3: note the date of `C:\Windows\CMTrace.exe` – the detection file of `studentX-CMTrace` from Lab 5.1.
 2. Download `Detect-ReinstallCMTrace.ps1` and `Remediate-ReinstallCMTrace.ps1` from the [Labfiles](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles).
-3. Intune admin center → Devices → Scripts and remediations → Remediations → **Create script package**: `etcX-Reinstall-CMTrace` with both scripts.
+3. Intune admin center → Devices → Scripts and remediations → Remediations → **Create script package**: `studentX-Reinstall-CMTrace` with both scripts.
 
    | Setting | Value |
    |---|---|
@@ -24,15 +24,15 @@ lab:
    | Run script in 64-bit PowerShell | Yes |
 
 4. On the Assignments page select **no group**. The remediation runs on demand only.
-5. Intune admin center → Devices → All devices → `CL3-yourname` → … → **Run remediation** → `etcX-Reinstall-CMTrace`.
+5. Intune admin center → Devices → All devices → `CL3-yourname` → … → **Run remediation** → `studentX-Reinstall-CMTrace`.
 6. CL3: follow `HealthScripts.log` in `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs`: the detection script exits with `1`, the remediation runs, `CMTrace.exe` is gone.
-7. About three minutes later the IME restarts. Follow `AppWorkload.log`: `etcX-CMTrace` is not detected, the install command runs, detection succeeds.
+7. About three minutes later the IME restarts. Follow `AppWorkload.log`: `studentX-CMTrace` is not detected, the install command runs, detection succeeds.
 8. Check the date of `C:\Windows\CMTrace.exe` again and the install status in the Intune admin center.
 
 ### Checkpoint
 
 - [ ] `HealthScripts.log`: detection with issue, remediation ran
-- [ ] `AppWorkload.log`: `etcX-CMTrace` reinstalled
+- [ ] `AppWorkload.log`: `studentX-CMTrace` reinstalled
 - [ ] `CMTrace.exe` is newer than in step 1
 - [ ] You can explain why the remediation must not be assigned to a group
 

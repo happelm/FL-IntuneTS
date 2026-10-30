@@ -1,7 +1,7 @@
-# Lab 6.1 - remediation script of the remediation etcX-Reg
-# Replace etcX with your prefix (for example etc3) before you upload the script.
+# Lab 6.1 - remediation script of the remediation studentX-Reg
+# Replace studentX with your prefix (for example student3) before you upload the script.
 
-$Key = 'HKLM:\SOFTWARE\etcX\Lab'
+$Key = 'HKLM:\SOFTWARE\studentX\Lab'
 
 try {
     New-Item -Path $Key -Force -ErrorAction Stop | Out-Null

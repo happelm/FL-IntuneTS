@@ -11,11 +11,11 @@ lab:
 
 **Goal:** Bring CL3 and CL4 into the training tenant and into your device group, named so that everybody can find them, and sign in with Windows Hello.
 
-1. Look up your user `etcX` and your number X in `course.txt` from the trainer.
+1. Look up your user `studentX` and your number X in `course.txt` from the trainer.
 2. CL3 and CL4 start at OOBE. When OOBE asks for the device name, enter `CL3-yourname` and `CL4-yourname`. Choose any privacy settings.
-3. Sign in with `etcX` as work or school account – this joins the client to Microsoft Entra ID. Complete MFA and set up Windows Hello with a PIN when Windows asks for it.
+3. Sign in with `studentX` as work or school account – this joins the client to Microsoft Entra ID. Complete MFA and set up Windows Hello with a PIN when Windows asks for it.
 4. Entra admin center → Groups → `studentXdevices` → Members: add `CL3-yourname` and `CL4-yourname`.
-5. From now on, every object you create in the tenant starts with `etcX-`.
+5. From now on, every object you create in the tenant starts with `studentX-`.
 
 ### Checkpoint
 

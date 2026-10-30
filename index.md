@@ -56,7 +56,7 @@ One shared training tenant – your objects carry your number, nobody touches an
 
 | System | Role | Note |
 |---|---|---|
-| Tenant | Shared training tenant of the trainer | You are user `etcX`; your groups are `studentXdevices` and `studentXusers` |
+| Tenant | Shared training tenant of the trainer | You are user `studentX`; your groups are `studentXdevices` and `studentXusers` |
 | CL3, CL4 | Windows 11 – your clients | Start at OOBE; renamed to `CL3-yourname` / `CL4-yourname`, Entra joined and enrolled by you in Lab 0.1 |
 | DC1 | AD DS, DNS – domain `training.flane` (trainer's pod) | On-premises resources for Microsoft Entra Kerberos (Lab 8.1) |
 | SRV1 | Member server in `training.flane` (trainer's pod) | On-premises resources for the SSO tests |
@@ -66,7 +66,7 @@ X is your participant number from `course.txt`. Passwords are handed out by the 
 
 ### Naming
 
-Every policy, profile, app and script you create starts with `etcX-` (for example `etc3-CMTrace`), so every object is unique and you find your own.
+Every policy, profile, app and script you create starts with `studentX-` (for example `student3-CMTrace`), so every object is unique and you find your own.
 
 ### Your permissions
 

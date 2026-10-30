@@ -21,9 +21,9 @@ lab:
 
    | Policy | Setting | Value | Assign to |
    |---|---|---|---|
-   | `etcX-User` | Administrative Templates → Control Panel → Personalization → **Prevent changing theme (User)** | Enabled | `studentXusers` |
-   | `etcX-Device` | Start → **Hide Recently Added Apps (Device)** | Hide | `studentXdevices` |
-   | `etcX-Device` | Config Refresh | Enabled, cadence 30 minutes | (same policy) |
+   | `studentX-User` | Administrative Templates → Control Panel → Personalization → **Prevent changing theme (User)** | Enabled | `studentXusers` |
+   | `studentX-Device` | Start → **Hide Recently Added Apps (Device)** | Hide | `studentXdevices` |
+   | `studentX-Device` | Config Refresh | Enabled, cadence 30 minutes | (same policy) |
 
 3. CL3: sync (Settings → Accounts → Access work or school → your account → Info → Sync).
 4. SyncML Viewer: press `F3` to search the stream – the search is not in the menu. Search for `DisableThemeChange` and `HideRecentlyAddedApps` and look at the `LocURI` of each: `./User/…` or `./Device/…`.

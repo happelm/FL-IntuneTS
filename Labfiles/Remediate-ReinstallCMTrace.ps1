@@ -1,4 +1,4 @@
-# Lab 5.2 - remediation script of the remediation etcX-Reinstall-CMTrace
+# Lab 5.2 - remediation script of the remediation studentX-Reinstall-CMTrace
 # Removes the detection file, clears the re-evaluation schedule, forces a full report, restarts the IME
 Remove-Item -Path 'C:\Windows\CMTrace.exe' -Force -ErrorAction SilentlyContinue
 # Clear the re-evaluation schedule so that the IME runs detection at the next check-in
