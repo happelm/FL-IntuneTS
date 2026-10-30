@@ -85,4 +85,4 @@ Not for you: roles, scope tags, tenant settings, Conditional Access. Assignment 
 
 - CMTrace for all .log files – from `\\dc1\labfiles` in Lab 2.1, deployed by Intune in Lab 5.1. Intune Management Extension logs in `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs`
 - Intune admin center: intune.microsoft.com · Entra admin center: entra.microsoft.com
-- Lab files: [Labfiles folder in this repository](https://github.com/happelm/MDDMI-TS/tree/main/Labfiles)
+- Lab files: [Labfiles folder in this repository](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles)

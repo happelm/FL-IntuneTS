@@ -13,7 +13,7 @@ lab:
 
 ### Part A – Platform script and remediation on the schedule
 
-1. Intune admin center → Devices → Scripts and remediations → Platform scripts → Add → Windows 10 and later: platform script `etcX-Folder` with `createtestfolder.ps1` from the [Labfiles](https://github.com/happelm/MDDMI-TS/tree/main/Labfiles), assigned to `studentXdevices`:
+1. Intune admin center → Devices → Scripts and remediations → Platform scripts → Add → Windows 10 and later: platform script `etcX-Folder` with `createtestfolder.ps1` from the [Labfiles](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles), assigned to `studentXdevices`:
 
    | Setting | Value |
    |---|---|

@@ -2,7 +2,7 @@
 
 Lab instructions for the two-day MDDMI-TS troubleshooting workshop.
 
-- **Read online:** <https://happelm.github.io/MDDMI-TS/>
+- **Read online:** <https://happelm.github.io/FL-IntuneTS/>
 
 ## Labs
 
@@ -82,11 +82,11 @@ Not for you: roles, scope tags, tenant settings, Conditional Access. Assignment 
 
 - CMTrace for all .log files – from `\\dc1\labfiles` in Lab 2.1, deployed by Intune in Lab 5.1. Intune Management Extension logs in `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs`
 - Intune admin center: intune.microsoft.com · Entra admin center: entra.microsoft.com
-- Lab files: [Labfiles folder in this repository](https://github.com/happelm/MDDMI-TS/tree/main/Labfiles)
+- Lab files: [Labfiles folder in this repository](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles)
 
 ## Known issues and feedback
 
-Known issues, workarounds and corrections are tracked in the [Issues](https://github.com/happelm/MDDMI-TS/issues) tab. If something in a lab does not work as described, check the open issues first, then open a new one with the lab number and the step.
+Known issues, workarounds and corrections are tracked in the [Issues](https://github.com/happelm/FL-IntuneTS/issues) tab. If something in a lab does not work as described, check the open issues first, then open a new one with the lab number and the step.
 
 ## Contributing
 
