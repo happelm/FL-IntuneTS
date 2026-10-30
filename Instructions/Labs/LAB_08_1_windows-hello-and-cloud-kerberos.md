@@ -18,7 +18,7 @@ lab:
    dsregcmd /status
    ```
 
-3. CL4: open the Labfiles share on DC1 in `smart.etc`: `\\dc1.smart.etc\labfiles`.
+3. CL4: open the Labfiles share on DC1 in `training.flane`: `\\dc1.training.flane\labfiles`.
 4. CL4: list your Kerberos tickets.
 
    ```cmd

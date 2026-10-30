@@ -58,9 +58,9 @@ One shared training tenant – your objects carry your number, nobody touches an
 |---|---|---|
 | Tenant | Shared training tenant of the trainer | You are user `etcX`; your groups are `studentXdevices` and `studentXusers` |
 | CL3, CL4 | Windows 11 – your clients | Start at OOBE; renamed to `CL3-yourname` / `CL4-yourname`, Entra joined and enrolled by you in Lab 0.1 |
-| DC1 | AD DS, DNS – domain `smart.etc` (trainer's pod) | On-premises resources for Microsoft Entra Kerberos (Lab 8.1) |
-| SRV1 | Member server in `smart.etc` (trainer's pod) | On-premises resources for the SSO tests |
-| Classroom LAN | DHCP (trainer's pod) | Connects your clients to `smart.etc` |
+| DC1 | AD DS, DNS – domain `training.flane` (trainer's pod) | On-premises resources for Microsoft Entra Kerberos (Lab 8.1) |
+| SRV1 | Member server in `training.flane` (trainer's pod) | On-premises resources for the SSO tests |
+| Classroom LAN | DHCP (trainer's pod) | Connects your clients to `training.flane` |
 
 X is your participant number from `course.txt`. Passwords are handed out by the trainer.
 
