@@ -91,5 +91,3 @@ Known issues, workarounds and corrections are tracked in the [Issues](https://gi
 ## Contributing
 
 Trainers and participants may fork this repository. Pull requests are welcome and are merged after review.
-
-(c) Enterprise Training Center
