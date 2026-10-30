@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Checkpoints: tickable, remembered per browser and page
-  var key = 'mddmi-ts-checks:' + location.pathname;
+  var key = 'intune-ts-checks:' + location.pathname;
   var saved = {};
   try { saved = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
   document.querySelectorAll('.task-list-item input[type=checkbox]').forEach(function (box, i) {

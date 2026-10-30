@@ -1,6 +1,6 @@
-# MDDMI-TS – Troubleshooting Microsoft Intune
+# Intune-TS – Troubleshooting Microsoft Intune
 
-Lab instructions for the two-day MDDMI-TS troubleshooting workshop.
+Lab instructions for the two-day Intune-TS troubleshooting workshop.
 
 - **Read online:** <https://happelm.github.io/FL-IntuneTS/>
 
@@ -37,7 +37,7 @@ App deployment and the Intune Management Extension, scripts and remediations, co
 
 ### Resources
 
-[MDDMI-TS link collection](https://github.com/happelm/Intune-Resources/blob/main/Intune3Links.md) – Learn articles, blogs and tools for this workshop.
+[Intune-TS link collection](https://github.com/happelm/Intune-Resources/blob/main/Intune3Links.md) – Learn articles, blogs and tools for this workshop.
 
 ## About this guide
 

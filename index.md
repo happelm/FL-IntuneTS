@@ -1,11 +1,11 @@
 ---
-title: MDDMI-TS Lab Instructions
+title: Intune-TS Lab Instructions
 permalink: index.html
 ---
 
-# MDDMI-TS – Troubleshooting Microsoft Intune
+# Intune-TS – Troubleshooting Microsoft Intune
 
-Lab instructions for the two-day MDDMI-TS troubleshooting workshop. Use the copy button on every code block.
+Lab instructions for the two-day Intune-TS troubleshooting workshop. Use the copy button on every code block.
 
 ## Labs
 
@@ -40,7 +40,7 @@ App deployment and the Intune Management Extension, scripts and remediations, co
 
 ### Resources
 
-[MDDMI-TS link collection](https://github.com/happelm/Intune-Resources/blob/main/Intune3Links.md) – Learn articles, blogs and tools for this workshop.
+[Intune-TS link collection](https://github.com/happelm/Intune-Resources/blob/main/Intune3Links.md) – Learn articles, blogs and tools for this workshop.
 
 ## About this guide
 
