@@ -44,7 +44,7 @@ Endpoint security, Microsoft Defender for Endpoint, Windows LAPS and Endpoint Pr
 | 12.1 | [Troubleshoot LAPS and EPM](Instructions/Labs/LAB_12_1_troubleshoot-laps-and-epm.html) (draft) | 60 min |
 | 13.1 | [Build your troubleshooting toolbox](Instructions/Labs/LAB_13_1_build-your-troubleshooting-toolbox.html) (draft) | 90 min |
 | 14.1 | [Write troubleshooting scripts with AI](Instructions/Labs/LAB_14_1_write-troubleshooting-scripts-with-ai.html) (draft) | 60 min |
-| 10.3 | [Partner breaks, you fix: round 2](Instructions/Labs/LAB_10_3_partner-breaks-you-fix-round-2.html) (draft) | 30 min |
+| 16.1 | [Partner breaks, you fix: round 2](Instructions/Labs/LAB_16_1_partner-breaks-you-fix-round-2.html) (draft) | 30 min |
 
 ### Appendix
 

@@ -1,11 +1,11 @@
 ---
-title: 'Lab 10.3 – Partner breaks, you fix: round 2'
+title: 'Lab 16.1 – Partner breaks, you fix: round 2'
 lab:
-    title: 'Lab 10.3 – Partner breaks, you fix: round 2'
+    title: 'Lab 16.1 – Partner breaks, you fix: round 2'
     module: 'Day 3 – Advanced troubleshooting and scripting'
 ---
 
-# Lab 10.3 – Partner breaks, you fix: round 2
+# Lab 16.1 – Partner breaks, you fix: round 2
 
 **Estimated time:** 30 minutes
 
