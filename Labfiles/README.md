@@ -9,4 +9,4 @@
 | `createtestfolder.ps1` | 6.1 | Platform script `studentX-Folder`: creates `C:\TestFolder` |
 | `Detect-LabKey.ps1`, `Remediate-LabKey.ps1` | 6.1 | Remediation `studentX-Reg`: replace `studentX` with your prefix before you upload |
 
-CMTrace for Lab 2.1 is on the classroom share `\\dc1\labfiles`. SyncML Viewer for Lab 4.1 is installed with `winget install syncmlviewer`.
+CMTrace for Lab 2.1 is on the Azure file share `\\flane.file.core.windows.net\labfiles` (reachable from CL3 and CL4 only). SyncML Viewer for Lab 4.1 is installed with `winget install syncmlviewer`.

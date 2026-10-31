@@ -19,10 +19,10 @@ lab:
    mdmdiagnosticstool.exe -area "DeviceEnrollment;DeviceProvisioning;Autopilot" -zip "C:\Users\Public\Documents\MDMDiagReport.zip"
    ```
 
-4. CL3: connect the lab share and copy `cmtrace.exe` to the desktop. Entra-joined clients have no mapped network drives – connect the share first.
+4. CL3: connect the lab share (an Azure file share) and copy `cmtrace.exe` to the desktop. Entra-joined clients have no mapped network drives – connect the share first. The share works only from CL3 and CL4, signed in as `studentX`.
 
    ```cmd
-   net use \\dc1\labfiles
+   net use \\flane.file.core.windows.net\labfiles
    ```
 
    Then open `IntuneManagementExtension.log` from `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs` with CMTrace.

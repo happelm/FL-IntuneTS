@@ -18,7 +18,7 @@ lab:
    dsregcmd /status
    ```
 
-3. CL4: open the Azure file share the trainer gives you.
+3. CL4: open the Azure file share `\\flane.file.core.windows.net\labfiles` (the share you used in Lab 2.1). It works only from CL3 and CL4.
 4. CL4: list your Kerberos tickets.
 
    ```cmd
@@ -32,7 +32,7 @@ lab:
 ### Checkpoint
 
 - [ ] `dsregcmd /status`, section SSO State: `AzureAdPrt`, `CloudTgt` and `OnPremTgt` are `YES`
-- [ ] Azure file share opens without a password prompt, `klist` shows a ticket for the storage account (`cifs/<storageaccount>.file.core.windows.net`)
+- [ ] Azure file share opens without a password prompt, `klist` shows a ticket for the storage account (`cifs/flane.file.core.windows.net`)
 
 **Note:** Microsoft Entra Kerberos and Windows Hello for Business are already enabled in the training tenant. `CloudTgt` is the cloud Kerberos ticket for cloud resources such as Azure Files, `OnPremTgt` the one for on-premises resources. Your clients have no line of sight to the domain controller in `training.flane`, so on-premises access is shown by the trainer.
 

@@ -60,7 +60,7 @@ One shared training tenant – your objects carry your number, nobody touches an
 | CL3, CL4 | Windows 11 – your clients | Start at OOBE; renamed to `CL3-yourname` / `CL4-yourname`, Entra joined and enrolled by you in Lab 0.1 |
 | DC1 | AD DS, DNS – domain `training.flane` (trainer's pod) | Source of the synced lab users; on-premises access is a trainer demo (Lab 8.1) |
 | SRV1 | Member server in `training.flane` (trainer's pod) | Trainer demo only |
-| Azure file share | Storage account in the training tenant, Microsoft Entra Kerberos | Your clients reach it without line of sight to `training.flane` (Lab 8.1) |
+| Azure file share | `\\flane.file.core.windows.net\labfiles` – Microsoft Entra Kerberos | Lab files; reachable from CL3 and CL4 only, no line of sight to `training.flane` needed (Labs 2.1, 8.1) |
 
 X is your participant number from `course.txt`. Passwords are handed out by the trainer.
 
@@ -83,6 +83,6 @@ Not for you: roles, scope tags, tenant settings, Conditional Access. Assignment 
 
 ### Tools
 
-- CMTrace for all .log files – from `\\dc1\labfiles` in Lab 2.1, deployed by Intune in Lab 5.1. Intune Management Extension logs in `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs`
+- CMTrace for all .log files – from `\\flane.file.core.windows.net\labfiles` (CL3/CL4 only) in Lab 2.1, deployed by Intune in Lab 5.1. Intune Management Extension logs in `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs`
 - Intune admin center: intune.microsoft.com · Entra admin center: entra.microsoft.com
 - Lab files: [Labfiles folder in this repository](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles)
