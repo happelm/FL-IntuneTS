@@ -9,7 +9,7 @@ lab:
 
 **Estimated time:** 10 minutes
 
-**Goal:** Sign in with Windows Hello and reach on-premises resources – and optionally Azure Files – without a password prompt.
+**Goal:** Sign in with Windows Hello and open an Azure file share without a password prompt.
 
 1. CL4: sign out and sign in again with the Windows Hello PIN you set up in Lab 0.1.
 2. CL4: check the SSO state.
@@ -18,21 +18,22 @@ lab:
    dsregcmd /status
    ```
 
-3. CL4: open the Labfiles share on DC1 in `training.flane`: `\\dc1.training.flane\labfiles`.
+3. CL4: open the Azure file share the trainer gives you.
 4. CL4: list your Kerberos tickets.
 
    ```cmd
    klist
    ```
 
-5. **Optional:** if the trainer provides an Azure file share, connect to it from CL4.
+5. Trainer demo: access to on-premises resources in `training.flane` (`\\dc1.training.flane\labfiles`) with the same sign-in.
+
+<!-- VERIFY: OnPremTgt = YES in the Fastlane pod without line of sight to DC1 -->
 
 ### Checkpoint
 
 - [ ] `dsregcmd /status`, section SSO State: `AzureAdPrt`, `CloudTgt` and `OnPremTgt` are `YES`
-- [ ] DC1 share opens without a password prompt, `klist` shows a ticket for DC1
-- [ ] Optional: Azure file share opens without a password prompt
+- [ ] Azure file share opens without a password prompt, `klist` shows a ticket for the storage account (`cifs/<storageaccount>.file.core.windows.net`)
 
-**Note:** Microsoft Entra Kerberos and Windows Hello for Business are already enabled in the training tenant. `CloudTgt` is the cloud Kerberos ticket for cloud resources, `OnPremTgt` the one for on-premises resources.
+**Note:** Microsoft Entra Kerberos and Windows Hello for Business are already enabled in the training tenant. `CloudTgt` is the cloud Kerberos ticket for cloud resources such as Azure Files, `OnPremTgt` the one for on-premises resources. Your clients have no line of sight to the domain controller in `training.flane`, so on-premises access is shown by the trainer.
 
 **Why:** No PRT, no SSO. Always start with `dsregcmd /status` before you look at the network or the file server.
