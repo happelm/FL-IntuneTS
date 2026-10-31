@@ -2,7 +2,7 @@
 title: 'Lab 11.1 – Troubleshoot endpoint security'
 lab:
     title: 'Lab 11.1 – Troubleshoot endpoint security'
-    module: 'Day 3 – Advanced troubleshooting and scripting'
+    module: 'Day 2 – Apps, protect, support'
 ---
 
 # Lab 11.1 – Troubleshoot endpoint security

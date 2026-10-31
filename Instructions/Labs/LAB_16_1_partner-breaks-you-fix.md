@@ -17,8 +17,8 @@ lab:
 
 | Round | Cards from | Object name | Time |
 |---|---|---|---|
-| 1 | Days 1–2: apps, scripts, remediations, configuration | `studentX-Case1` | 25 min |
-| 2 | Day 3: endpoint security, LAPS, EPM | `studentX-Case2` | 25 min |
+| 1 | Apps, scripts, remediations, configuration (Days 1–2) | `studentX-Case1` | 25 min |
+| 2 | Endpoint security, LAPS, EPM (Days 2–3) | `studentX-Case2` | 25 min |
 
 Each card describes one Intune object with exactly one wrong setting. You build it for your partner's CL3 – your partner builds one for yours. You don't tell your partner what is on your card.
 

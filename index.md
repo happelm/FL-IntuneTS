@@ -22,7 +22,7 @@ Troubleshooting method and service-side tools, log files, registration and enrol
 
 ### Day 2 – Apps, protect, support
 
-App deployment and the Intune Management Extension, scripts and remediations, compliance and Conditional Access, SSO and Microsoft Entra Kerberos, legacy management conflicts (demo), support, retire and community tools.
+App deployment and the Intune Management Extension, scripts and remediations, compliance and Conditional Access, SSO and Microsoft Entra Kerberos, legacy management conflicts (demo), support, retire and community tools, endpoint security and Microsoft Defender for Endpoint on the client.
 
 | Lab | Title | Time |
 |---|---|---|
@@ -31,14 +31,14 @@ App deployment and the Intune Management Extension, scripts and remediations, co
 | 6.1 | [Trace a platform script and a remediation](Instructions/Labs/LAB_06_1_trace-a-platform-script-and-a-remediation.html) | 40 min |
 | 7.1 | [Trace a compliance block](Instructions/Labs/LAB_07_1_trace-a-compliance-block.html) | 30 min |
 | 8.1 | [Windows Hello and cloud Kerberos](Instructions/Labs/LAB_08_1_windows-hello-and-cloud-kerberos.html) | 45 min |
+| 11.1 | [Troubleshoot endpoint security](Instructions/Labs/LAB_11_1_troubleshoot-endpoint-security.html) (draft) | 75 min |
 
 ### Day 3 – Advanced troubleshooting and scripting
 
-Endpoint security, Microsoft Defender for Endpoint, Windows LAPS and Endpoint Privilege Management on the client; Microsoft Graph and a script toolbox for support cases; compliance history from reports, the Data Warehouse and the audit log; writing and checking scripts with AI; a read-only look at iOS and Android devices; demos of change audit, Device query and Remote Help; a final partner case with scenarios from all three days.
+Windows LAPS and Endpoint Privilege Management on the client; Microsoft Graph and a script toolbox for support cases; compliance history from reports, the Data Warehouse and the audit log; writing and checking scripts with AI; a read-only look at iOS and Android devices; demos of change audit, Device query and Remote Help; a final partner case with scenarios from all three days.
 
 | Lab | Title | Time |
 |---|---|---|
-| 11.1 | [Troubleshoot endpoint security](Instructions/Labs/LAB_11_1_troubleshoot-endpoint-security.html) (draft) | 75 min |
 | 12.1 | [Troubleshoot LAPS and EPM](Instructions/Labs/LAB_12_1_troubleshoot-laps-and-epm.html) (draft) | 60 min |
 | 13.1 | [Troubleshoot with Microsoft Graph](Instructions/Labs/LAB_13_1_troubleshoot-with-microsoft-graph.html) | 30 min |
 | 13.2 | [Build your troubleshooting toolbox](Instructions/Labs/LAB_13_2_build-your-troubleshooting-toolbox.html) (draft) | 90 min |
