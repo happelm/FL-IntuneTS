@@ -63,7 +63,6 @@ lab:
 
 **Why:** "It worked yesterday" is a claim. The trend shows since when, the audit log shows the change that fits the time – that is the evidence for the ticket.
 
-<!-- VERIFY: Data Warehouse access for studentX (Reports_Read in Lab-Administrator for Students; tenant has a custom role "Intune DatawareHouse Reader" with Reports_Read only) -->
 <!-- VERIFY: DeviceComplianceTrend export in the demo tenant: value of ComplianceState and how many days back -->
 <!-- VERIFY: Excel on CL3 (also VERIFY in Lab 13.1) -->
 <!-- VERIFY: audit log entry names the policy and the changed setting for compliance policies -->
