@@ -60,7 +60,7 @@ lab:
    ```
 
 10. Right-click `cmtrace.exe` on the **share** → **Run with elevated access**. Then the same on the copy in `C:\Tools`. What is the difference?
-11. Sign in to CL4 with your partner's account `studentY` – a standard user on your device. Copy `cmtrace.exe` to `C:\Tools` on CL4 and repeat step 10 there.
+11. Let your partner sign in to your CL4 with their account `studentY`. Only the account that joined a device to Microsoft Entra ID becomes its local administrator – `studentY` is a standard user on your CL4. Copy `cmtrace.exe` to `C:\Tools` on CL4 and repeat step 10 there.
 12. Endpoint Privilege Management → **Reports**: find your elevations. How is the elevation from your own account listed?
 
 ### Checkpoint
@@ -76,5 +76,4 @@ lab:
 
 <!-- VERIFY: exact display names of the automatic account management settings in the Intune LAPS profile -->
 <!-- VERIFY: Get-FileAttributes parameter name (-FilePath) -->
-<!-- VERIFY: studentX is local admin on CL3/CL4 (Entra join user) – then step 11 needs the partner account as standard user -->
 <!-- VERIFY: tenant-wide LAPS or EPM policies on studentXdevices that would conflict -->
