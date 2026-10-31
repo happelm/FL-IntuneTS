@@ -104,6 +104,5 @@ lab:
 **Why:** Endpoint security policies, security baselines and configuration profiles can set the same setting. The portal shows a conflict, the client shows what won. Start with the client, then go back to the portal.
 
 <!-- VERIFY: WMI Win32_Process Create triggers 1122 for rule d1e49aac-8f56-4280-b9ba-993a6d77406c -->
-<!-- VERIFY: vTPM on CL3 in the nested VMware pod; without it BitLocker fails with 853 (good teaching case) -->
 <!-- VERIFY: Lab-Administrator for Students creates AV/BitLocker policies (SecurityBaselines permission) -->
 <!-- VERIFY: WindowsEvent log name syntax with a slash in Device query -->

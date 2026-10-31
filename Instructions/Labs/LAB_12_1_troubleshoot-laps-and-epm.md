@@ -74,8 +74,6 @@ lab:
 
 **Why:** LAPS and EPM fail silently from the user's point of view. The event log and the EpmTools cmdlets tell you which layer broke: policy not received, rule not matching, or a case EPM doesn't support.
 
-<!-- VERIFY: Entra LAPS enabled in the tenant (Entra admin center → Devices → Device settings) -->
-<!-- VERIFY: studentX can read the LAPS password (Cloud Device Administrator in the AU scope) -->
 <!-- VERIFY: exact display names of the automatic account management settings in the Intune LAPS profile -->
 <!-- VERIFY: Get-FileAttributes parameter name (-FilePath) -->
 <!-- VERIFY: studentX is local admin on CL3/CL4 (Entra join user) – then step 11 needs the partner account as standard user -->
