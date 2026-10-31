@@ -28,21 +28,21 @@ App deployment and the Intune Management Extension, scripts and remediations, co
 | 6.1 | [Trace a platform script and a remediation](Instructions/Labs/LAB_06_1_trace-a-platform-script-and-a-remediation.md) | 40 min |
 | 7.1 | [Trace a compliance block](Instructions/Labs/LAB_07_1_trace-a-compliance-block.md) | 30 min |
 | 8.1 | [Windows Hello and cloud Kerberos](Instructions/Labs/LAB_08_1_windows-hello-and-cloud-kerberos.md) | 45 min |
-| 10.1 | [Troubleshoot with Microsoft Graph](Instructions/Labs/LAB_10_1_troubleshoot-with-microsoft-graph.md) | 30 min |
-| 10.2 | [Partner breaks, you fix](Instructions/Labs/LAB_10_2_partner-breaks-you-fix.md) (draft, if time permits) | 30 min |
 
 ### Day 3 – Advanced troubleshooting and scripting
 
-Endpoint security, Microsoft Defender for Endpoint, Windows LAPS and Endpoint Privilege Management on the client; a script toolbox for support cases; compliance history from reports, the Data Warehouse and the audit log; writing and checking scripts with AI; demos of change audit, Device query and Remote Help.
+Endpoint security, Microsoft Defender for Endpoint, Windows LAPS and Endpoint Privilege Management on the client; Microsoft Graph and a script toolbox for support cases; compliance history from reports, the Data Warehouse and the audit log; writing and checking scripts with AI; a read-only look at iOS and Android devices; demos of change audit, Device query and Remote Help; a final partner case with scenarios from all three days.
 
 | Lab | Title | Time |
 |---|---|---|
 | 11.1 | [Troubleshoot endpoint security](Instructions/Labs/LAB_11_1_troubleshoot-endpoint-security.md) (draft) | 75 min |
 | 12.1 | [Troubleshoot LAPS and EPM](Instructions/Labs/LAB_12_1_troubleshoot-laps-and-epm.md) (draft) | 60 min |
-| 13.1 | [Build your troubleshooting toolbox](Instructions/Labs/LAB_13_1_build-your-troubleshooting-toolbox.md) (draft) | 90 min |
-| 13.2 | [Prove when it broke](Instructions/Labs/LAB_13_2_prove-when-it-broke.md) (draft, if time permits) | 30 min |
+| 13.1 | [Troubleshoot with Microsoft Graph](Instructions/Labs/LAB_13_1_troubleshoot-with-microsoft-graph.md) | 30 min |
+| 13.2 | [Build your troubleshooting toolbox](Instructions/Labs/LAB_13_2_build-your-troubleshooting-toolbox.md) (draft) | 90 min |
+| 13.3 | [Prove when it broke](Instructions/Labs/LAB_13_3_prove-when-it-broke.md) (draft, if time permits) | 30 min |
 | 14.1 | [Write troubleshooting scripts with AI](Instructions/Labs/LAB_14_1_write-troubleshooting-scripts-with-ai.md) (draft) | 60 min |
-| 16.1 | [Partner breaks, you fix: round 2](Instructions/Labs/LAB_16_1_partner-breaks-you-fix-round-2.md) (draft) | 30 min |
+| 15.1 | [Read a mobile device](Instructions/Labs/LAB_15_1_read-a-mobile-device.md) (draft, if time permits) | 30 min |
+| 16.1 | [Partner breaks, you fix](Instructions/Labs/LAB_16_1_partner-breaks-you-fix.md) (draft) – final case with scenarios from all three days | 60 min |
 
 ### Appendix
 

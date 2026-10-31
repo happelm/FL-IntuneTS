@@ -1,11 +1,11 @@
 ---
-title: 'Lab 13.2 – Prove when it broke'
+title: 'Lab 13.3 – Prove when it broke'
 lab:
-    title: 'Lab 13.2 – Prove when it broke'
+    title: 'Lab 13.3 – Prove when it broke'
     module: 'Day 3 – Advanced troubleshooting and scripting'
 ---
 
-# Lab 13.2 – Prove when it broke
+# Lab 13.3 – Prove when it broke
 
 **Estimated time:** 30 minutes (if time permits)
 
@@ -13,7 +13,7 @@ lab:
 
 **Goal:** Answer the three questions of every compliance ticket – what is the state now, since when, and who changed what – with a Graph export, the audit log and the Intune Data Warehouse in Excel.
 
-**Starting point:** In Lab 7.1 you made CL3 noncompliant with `studentX-MinOS` and repaired it. That is your incident. The scripts are in `C:\Toolbox` from Lab 13.1, the Excel queries in `C:\Toolbox\DataWarehouse`.
+**Starting point:** In Lab 7.1 you made CL3 noncompliant with `studentX-MinOS` and repaired it. That is your incident. The scripts are in `C:\Toolbox` from Lab 13.2, the Excel queries in `C:\Toolbox\DataWarehouse`.
 
 ### Part A – Now: snapshot with Graph
 
@@ -64,5 +64,5 @@ lab:
 **Why:** "It worked yesterday" is a claim. The trend shows since when, the audit log shows the change that fits the time – that is the evidence for the ticket.
 
 <!-- VERIFY: DeviceComplianceTrend export in the demo tenant: value of ComplianceState and how many days back -->
-<!-- VERIFY: Excel on CL3 (also VERIFY in Lab 13.1) -->
+<!-- VERIFY: Excel on CL3 (also VERIFY in Lab 13.2) -->
 <!-- VERIFY: audit log entry names the policy and the changed setting for compliance policies -->

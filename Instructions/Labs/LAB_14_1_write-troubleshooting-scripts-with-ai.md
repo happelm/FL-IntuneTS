@@ -18,7 +18,7 @@ lab:
 ### Part A – Prompt
 
 1. CL3: open Microsoft Edge, sign in with `studentX` and open Copilot Chat at `https://copilot.cloud.microsoft`. Check that you are in the **Work** experience.
-2. Pick one question your toolbox from Lab 13.1 does not answer, for example:
+2. Pick one question your toolbox from Lab 13.2 does not answer, for example:
    - Which Windows devices in `studentXdevices` haven't synced for more than 7 days?
    - Which settings catalog policies contain a setting with `BitLocker` in its name, and to which groups are they assigned?
    - On which devices did the detection script of `studentX-Reg` report an issue in the last 24 hours?
@@ -50,7 +50,7 @@ lab:
    ```
 
    Compare with the Microsoft Graph API reference on Microsoft Learn: endpoint, `v1.0` or `beta`, property names in `$select` and `$filter`.
-7. Paste each URL into Graph Explorer (Lab 10.1) with method **GET** – does it return what the script expects?
+7. Paste each URL into Graph Explorer (Lab 13.1) with method **GET** – does it return what the script expects?
 8. Search the script for anything that writes: `POST`, `PATCH`, `PUT`, `DELETE`, `Remove-`, `Set-`, `New-`, a scope ending in `ReadWrite`. Remove it or ask Copilot to remove it.
 
 ### Part C – Run and compare

@@ -1,11 +1,11 @@
 ---
-title: 'Lab 13.1 – Build your troubleshooting toolbox'
+title: 'Lab 13.2 – Build your troubleshooting toolbox'
 lab:
-    title: 'Lab 13.1 – Build your troubleshooting toolbox'
+    title: 'Lab 13.2 – Build your troubleshooting toolbox'
     module: 'Day 3 – Advanced troubleshooting and scripting'
 ---
 
-# Lab 13.1 – Build your troubleshooting toolbox
+# Lab 13.2 – Build your troubleshooting toolbox
 
 **Estimated time:** 90 minutes
 
@@ -13,7 +13,7 @@ lab:
 
 **Goal:** Answer the first questions of a support case with read-only scripts – and compare each answer with the portal and with Device query.
 
-**Starting point:** The scripts are in the folder `Toolbox` of the [Labfiles](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles). They only read: every call is a Graph GET, the report export a POST that creates an export job. Lab 10.1 showed the single calls – here they become tools.
+**Starting point:** The scripts are in the folder `Toolbox` of the [Labfiles](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles). They only read: every call is a Graph GET, the report export a POST that creates an export job. Lab 13.1 showed the single calls – here they become tools.
 
 ### Part A – Prepare CL3
 

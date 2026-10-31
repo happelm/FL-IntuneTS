@@ -1,11 +1,11 @@
 ---
-title: 'Lab 10.1 – Troubleshoot with Microsoft Graph'
+title: 'Lab 13.1 – Troubleshoot with Microsoft Graph'
 lab:
-    title: 'Lab 10.1 – Troubleshoot with Microsoft Graph'
-    module: 'Day 2 – Apps, protect, support'
+    title: 'Lab 13.1 – Troubleshoot with Microsoft Graph'
+    module: 'Day 3 – Advanced troubleshooting and scripting'
 ---
 
-# Lab 10.1 – Troubleshoot with Microsoft Graph
+# Lab 13.1 – Troubleshoot with Microsoft Graph
 
 **Estimated time:** 30 minutes
 
@@ -63,13 +63,13 @@ Open Graph Explorer (`https://aka.ms/ge`) and sign in with your user `studentX`.
 
 ### Part C – What changed, and act
 
-7. Method **GET** – every change to apps since this morning: who, when, which object. Replace the date with today:
+7. Method **GET** – every change to apps since yesterday morning: who, when, which object. Replace the date with yesterday's date:
 
    ```text
    https://graph.microsoft.com/v1.0/deviceManagement/auditEvents?$filter=activityDateTime ge 2026-10-16T00:00:00Z and componentName eq 'MobileApp'&$select=activityDateTime,activityType,actor,resources&$top=20
    ```
 
-   Run it again with `componentName eq 'DeviceConfiguration'` and `componentName eq 'ManagedDevices'`. Find your own changes from Lab 5.1 and 6.1.
+   Run it again with `componentName eq 'DeviceConfiguration'` and `componentName eq 'ManagedDevices'`. Find your own changes from Lab 5.1 and 6.1 on Day 2.
 
 8. Method **POST**, request body empty – sync CL3, then run step 1 again a few minutes later and compare `lastSyncDateTime`:
 
@@ -82,7 +82,7 @@ Open Graph Explorer (`https://aka.ms/ge`) and sign in with your user `studentX`.
 - [ ] Intune device ID, device ID and Entra object ID of CL3 noted – three different IDs
 - [ ] Number of Entra objects named `CL3-yourname` checked
 - [ ] `studentXdevices` found in the group list of CL3
-- [ ] Your own changes from today found in the audit events
+- [ ] Your own changes from Day 2 found in the audit events
 - [ ] Sync triggered through Graph, `lastSyncDateTime` updated
 
 **Note:** In Graph Explorer, **Code snippets** next to the response shows the PowerShell command for the same request – the step from a query to a script.
