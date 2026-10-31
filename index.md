@@ -5,7 +5,7 @@ permalink: index.html
 
 # Intune-TS – Troubleshooting Microsoft Intune
 
-Lab instructions for the two-day Intune-TS troubleshooting workshop. Use the copy button on every code block.
+Lab instructions for the three-day Intune-TS troubleshooting workshop. Use the copy button on every code block.
 
 ## Labs
 
@@ -33,6 +33,18 @@ App deployment and the Intune Management Extension, scripts and remediations, co
 | 8.1 | [Windows Hello and cloud Kerberos](Instructions/Labs/LAB_08_1_windows-hello-and-cloud-kerberos.html) | 45 min |
 | 10.1 | [Troubleshoot with Microsoft Graph](Instructions/Labs/LAB_10_1_troubleshoot-with-microsoft-graph.html) | 30 min |
 | 10.2 | [Partner breaks, you fix](Instructions/Labs/LAB_10_2_partner-breaks-you-fix.html) (draft, if time permits) | 30 min |
+
+### Day 3 – Advanced troubleshooting and scripting
+
+Endpoint security, Microsoft Defender for Endpoint, Windows LAPS and Endpoint Privilege Management on the client; a script toolbox for support cases; writing and checking scripts with AI; demos of change audit, Device query and Remote Help.
+
+| Lab | Title | Time |
+|---|---|---|
+| 11.1 | [Troubleshoot endpoint security](Instructions/Labs/LAB_11_1_troubleshoot-endpoint-security.html) (draft) | 75 min |
+| 12.1 | [Troubleshoot LAPS and EPM](Instructions/Labs/LAB_12_1_troubleshoot-laps-and-epm.html) (draft) | 60 min |
+| 13.1 | [Build your troubleshooting toolbox](Instructions/Labs/LAB_13_1_build-your-troubleshooting-toolbox.html) (draft) | 90 min |
+| 14.1 | [Write troubleshooting scripts with AI](Instructions/Labs/LAB_14_1_write-troubleshooting-scripts-with-ai.html) (draft) | 60 min |
+| 10.3 | [Partner breaks, you fix: round 2](Instructions/Labs/LAB_10_3_partner-breaks-you-fix-round-2.html) (draft) | 30 min |
 
 ### Appendix
 

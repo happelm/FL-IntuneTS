@@ -8,5 +8,8 @@
 | `Detect-ReinstallCMTrace.ps1`, `Remediate-ReinstallCMTrace.ps1` | 5.2 | Remediation `studentX-Reinstall-CMTrace`, run on demand: removes the detection file of `studentX-CMTrace` and lets the IME reinstall it |
 | `createtestfolder.ps1` | 6.1 | Platform script `studentX-Folder`: creates `C:\TestFolder` |
 | `Detect-LabKey.ps1`, `Remediate-LabKey.ps1` | 6.1 | Remediation `studentX-Reg`: replace `studentX` with your prefix before you upload |
+| `Toolbox\Get-IntunePolicyAssignmentsByGroup.ps1` | 13.1, 10.3 | Read-only: every Intune object that reaches a group, a device (`-DeviceName`) or a user (`-UserPrincipalName`) |
+| `Toolbox\Find-UnassignedIntuneObjects.ps1` | 13.1 | Read-only: Intune objects without assignment, with exclusions only or with deleted groups only |
+| `Toolbox\Export-IntuneReport.ps1`, `Toolbox\ReportPresets.json` | 13.1 | Exports an Intune report through the Graph exportJobs API as CSV; presets for remediation results and app install status |
 
 CMTrace for Lab 2.1 is on the Azure file share `\\flane.file.core.windows.net\labfiles` (reachable from CL3 and CL4 only). SyncML Viewer for Lab 4.1 is installed with `winget install syncmlviewer`.
