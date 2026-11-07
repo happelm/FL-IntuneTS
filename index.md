@@ -74,13 +74,13 @@ One shared training tenant – your objects carry your number, nobody touches an
 
 | System | Role | Note |
 |---|---|---|
-| Tenant | Shared training tenant of the trainer | You are user `studentX`; your groups are `studentXdevices` and `studentXusers` |
+| Tenant | Shared training tenant of the trainer | You are user `flaneX`; your groups are `studentXdevices` and `studentXusers` |
 | CL3, CL4 | Windows 11 – your clients | Start at OOBE; renamed to `CL3-yourname` / `CL4-yourname`, Entra joined and enrolled by you in Lab 0.1 |
 | DC1 | AD DS, DNS – domain `training.flane` (trainer's pod) | Source of the synced lab users; on-premises access is a trainer demo (Lab 8.1) |
 | SRV1 | Member server in `training.flane` (trainer's pod) | Trainer demo only |
 | Azure file share | `\\flane.file.core.windows.net\labfiles` – Microsoft Entra Kerberos | Lab files; reachable from CL3 and CL4 only, no line of sight to `training.flane` needed (Labs 2.1, 8.1) |
 
-X is your participant number from `course.txt`. Passwords are handed out by the trainer.
+X is your participant number from `course.txt`. User `flane3` works with `student3devices`, `student3users` and the prefix `student3-`. Passwords are handed out by the trainer.
 
 ### Naming
 

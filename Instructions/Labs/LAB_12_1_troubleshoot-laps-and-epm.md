@@ -60,7 +60,7 @@ lab:
    ```
 
 10. Right-click `cmtrace.exe` on the **share** → **Run with elevated access**. Then the same on the copy in `C:\Tools`. What is the difference?
-11. Let your partner sign in to your CL4 with their account `studentY`. Only the account that joined a device to Microsoft Entra ID becomes its local administrator – `studentY` is a standard user on your CL4. Copy `cmtrace.exe` to `C:\Tools` on CL4 and repeat step 10 there.
+11. Let your partner sign in to your CL4 with their account `flaneY`. Only the account that joined a device to Microsoft Entra ID becomes its local administrator – `flaneY` is a standard user on your CL4. Copy `cmtrace.exe` to `C:\Tools` on CL4 and repeat step 10 there.
 12. Endpoint Privilege Management → **Reports**: find your elevations. How is the elevation from your own account listed?
 
 ### Checkpoint

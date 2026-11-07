@@ -27,7 +27,7 @@ lab:
 
 ### Part B – What hits this device?
 
-3. Device view for CL3 – sign in with `studentX` when asked and confirm the tenant:
+3. Device view for CL3 – sign in with `flaneX` when asked and confirm the tenant:
 
    ```powershell
    cd C:\Toolbox

@@ -17,7 +17,7 @@ lab:
 
 ### Part A – Prompt
 
-1. CL3: open Microsoft Edge, sign in with `studentX` and open Copilot Chat at `https://copilot.cloud.microsoft`. Check that you are in the **Work** experience.
+1. CL3: open Microsoft Edge, sign in with `flaneX` and open Copilot Chat at `https://copilot.cloud.microsoft`. Check that you are in the **Work** experience.
 2. Pick one question your toolbox from Lab 13.2 does not answer, for example:
    - Which Windows devices in `studentXdevices` haven't synced for more than 7 days?
    - Which settings catalog policies contain a setting with `BitLocker` in its name, and to which groups are they assigned?
@@ -76,6 +76,6 @@ lab:
 
 **Why:** AI writes a script in seconds. Whether it answers the support question correctly is still your job – and the check takes longer than the prompt.
 
-<!-- VERIFY: Copilot Chat available for studentX users (E5 developer licenses), several users at the same time -->
+<!-- VERIFY: Copilot Chat available for flaneX users (E5 developer licenses), several users at the same time -->
 <!-- VERIFY: Graph consent for the scopes the generated scripts request (Microsoft Graph Command Line Tools) -->
 <!-- VERIFY: PSScriptAnalyzer install from PowerShell Gallery works in the pod -->

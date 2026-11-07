@@ -36,7 +36,7 @@ lab:
 
    Filter on `ComplianceState` = noncompliant. Do you see the day of Lab 7.1?
 3. Intune admin center → Reports → Intune Data warehouse → **Data warehouse**: copy the OData feed URL, without `?api-version=...`.
-4. Excel → Data → Get Data → From Other Sources → **Blank Query** → Advanced Editor: paste `DataWarehouse\ComplianceTrend.pq`, replace the value of `FeedUrl` with your URL, **Done**. Sign in with **Organizational account** as `studentX`, then **Close & Load**.
+4. Excel → Data → Get Data → From Other Sources → **Blank Query** → Advanced Editor: paste `DataWarehouse\ComplianceTrend.pq`, replace the value of `FeedUrl` with your URL, **Done**. Sign in with **Organizational account** as `flaneX`, then **Close & Load**.
 5. Insert a line chart from the table. Compare the curve with the CSV from step 2.
 6. Same way with `DataWarehouse\Devices.pq`: compare `lastSyncDateTime` of CL3 and CL4 with Devices → `CL3-yourname` → **Last check-in** in the portal.
 

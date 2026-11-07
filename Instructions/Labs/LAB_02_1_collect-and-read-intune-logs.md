@@ -19,7 +19,7 @@ lab:
    mdmdiagnosticstool.exe -area "DeviceEnrollment;DeviceProvisioning;Autopilot" -zip "C:\Users\Public\Documents\MDMDiagReport.zip"
    ```
 
-4. CL3: connect the lab share (an Azure file share) and copy `cmtrace.exe` to the desktop. Entra-joined clients have no mapped network drives – connect the share first. The share works only from CL3 and CL4, signed in as `studentX`.
+4. CL3: connect the lab share (an Azure file share) and copy `cmtrace.exe` to the desktop. Entra-joined clients have no mapped network drives – connect the share first. The share works only from CL3 and CL4, signed in as `flaneX`.
 
    ```cmd
    net use \\flane.file.core.windows.net\labfiles
