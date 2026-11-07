@@ -42,7 +42,7 @@ lab:
 
 ### Part C – Who changed what
 
-7. Intune admin center → Tenant administration → **Audit logs**: filter on the last 7 days and find the changes to `studentX-MinOS` from Lab 7.1. Who changed what, and when?
+7. Intune admin center → Tenant administration → **Audit logs**: filter on the last 7 days and find the changes to `studentX-MinOS` from Lab 7.1. Who changed what, and when? The actor is your sign-in user `flaneX`, the object carries your prefix `studentX-`.
 8. Fill in the table: which source answers which question?
 
    | Question | Graph export | Data Warehouse | Audit log |

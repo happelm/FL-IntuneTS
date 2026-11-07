@@ -74,7 +74,7 @@ lab:
 11. Intune admin center → Devices → `CL3-yourname` → **Device query**: check the state that `studentX-Reg` enforces and the IME service.
 
     ```text
-    WindowsRegistry('HKEY_LOCAL_MACHINE\\SOFTWARE\\studentX\\Lab')
+    WindowsRegistry('HKEY_LOCAL_MACHINE\\SOFTWARE\\flaneX\\Lab')
     ```
 
     ```text

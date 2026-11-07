@@ -21,7 +21,7 @@ lab:
    | Enforce script signature check | No |
    | Run script in 64-bit PowerShell host | No |
 
-2. In `Detect-LabKey.ps1` and `Remediate-LabKey.ps1` from the Labfiles, replace `studentX` with your prefix. Read both: which exit code means compliant, which one starts the remediation?
+2. In `Detect-LabKey.ps1` and `Remediate-LabKey.ps1` from the Labfiles, replace `flaneX` in the registry key with your user name (for example `flane3`). Read both: which exit code means compliant, which one starts the remediation?
 3. Intune admin center → Devices → Scripts and remediations → Remediations → **Create script package**: `studentX-Reg` with both scripts, assigned to `studentXdevices`, schedule **Hourly**:
 
    | Setting | Value |
@@ -45,7 +45,7 @@ lab:
 8. CL3, elevated PowerShell: break what `studentX-Reg` fixed.
 
    ```powershell
-   Remove-Item -Path 'HKLM:\SOFTWARE\studentX\Lab' -Recurse -Force
+   Remove-Item -Path 'HKLM:\SOFTWARE\flaneX\Lab' -Recurse -Force
    ```
 
 9. Do not wait for the schedule: Intune admin center → Devices → All devices → `CL3-yourname` → … → **Run remediation** → `studentX-Reg`.
@@ -56,8 +56,8 @@ lab:
 
 - [ ] `C:\TestFolder` exists on CL3
 - [ ] Exit code of `studentX-Folder` found in `AgentExecutor.log`
-- [ ] `studentX-Reg`: issue found, then fixed – `HKLM\SOFTWARE\studentX\Lab` exists on CL3
-- [ ] Run on demand: `HKLM\SOFTWARE\studentX\Lab` deleted and back again, without waiting for the schedule
+- [ ] `studentX-Reg`: issue found, then fixed – `HKLM\SOFTWARE\flaneX\Lab` exists on CL3
+- [ ] Run on demand: `HKLM\SOFTWARE\flaneX\Lab` deleted and back again, without waiting for the schedule
 - [ ] Device status shows **Issue fixed** with the output of both detection runs
 
 **Note:** Detection exits with `1` when the key is missing – only exit code `1` starts the remediation. A platform script that fails is retried three times at the next three IME check-ins, then it stays failed until the script or the policy changes.

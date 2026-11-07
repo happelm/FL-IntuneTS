@@ -4,6 +4,8 @@ Lab instructions for the three-day Intune-TS troubleshooting workshop.
 
 - **Read online:** <https://happelm.github.io/FL-IntuneTS/>
 
+> **Auf Deutsch lesen:** Öffne <a href="https://translate.google.com/?sl=auto&amp;tl=de&amp;op=websites" target="_blank" rel="noopener">Google Translate</a>, füge unter **Websites** die Adresse `https://happelm.github.io/FL-IntuneTS/` ein und bestätige – die Lab-Anleitung erscheint dann übersetzt. Befehle, Pfade und Menünamen kopierst Du besser aus der englischen Originalseite, weil die Übersetzung sie verändern kann.
+
 > [!IMPORTANT]
 > **Online participants (Fast Lane Remote Labs) – copy and paste:** in the remote lab, copy with **Ctrl+Shift+Alt+C** and paste with **Ctrl+Shift+Alt+V**. The normal Ctrl+C / Ctrl+V don't work between your computer and the lab.
 >
