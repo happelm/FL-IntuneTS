@@ -7,9 +7,26 @@
   .markdown-body ul.task-list, .markdown-body .task-list-item { list-style: none; }
   .markdown-body ul.task-list { padding-left: 0.4em; }
   .markdown-body .task-list-item input[type=checkbox] { margin: 0 0.5em 0 0; vertical-align: middle; transform: scale(1.15); cursor: pointer; }
+  .markdown-body blockquote.alert-important { border-left: 6px solid #d83b01; background: #fff4ce; color: #242424; padding: 10px 16px; font-size: 1.05em; }
+  .markdown-body blockquote.alert-important > :last-child { margin-bottom: 0; }
+  .markdown-body blockquote.alert-important .alert-title { font-weight: 700; color: #d83b01; margin: 0 0 4px 0; }
 </style>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  // Highlighted boxes on Pages: "> [!IMPORTANT]" (title "Important") and quotes that start with the keyboard sign
+  document.querySelectorAll('.markdown-body blockquote').forEach(function (bq) {
+    var p = bq.querySelector('p');
+    if (!p) return;
+    if (/^\s*\[!IMPORTANT\]/.test(p.innerHTML)) {
+      p.innerHTML = p.innerHTML.replace(/^\s*\[!IMPORTANT\]\s*(<br\s*\/?>)?\s*/, '');
+      bq.classList.add('alert-important');
+      var title = document.createElement('p');
+      title.className = 'alert-title'; title.textContent = 'Important';
+      bq.insertBefore(title, bq.firstChild);
+    } else if (/^\s*\u2328/.test(p.textContent)) {
+      bq.classList.add('alert-important');
+    }
+  });
   document.querySelectorAll('div.highlighter-rouge, pre:not(.highlight)').forEach(function (block) {
     if (block.closest('div.highlighter-rouge') && block.tagName === 'PRE') return;
     var code = block.querySelector('code') || block;
