@@ -21,7 +21,7 @@ lab:
    |---|---|
    | Backup Directory | Backup the password to Azure AD only |
    | Password Age Days | 7 |
-   | Administrator Account Name | `studentX-admin` |
+   | Administrator Account Name | `flaneX-admin` |
 
 2. Sync CL3. CL3, elevated PowerShell: start a processing cycle now instead of waiting.
 
@@ -36,7 +36,7 @@ lab:
    Get-LapsDiagnostics -OutputFolder C:\LapsDiag
    ```
 
-5. Fix `studentX-LAPS`: let Windows LAPS create and manage the account itself – **Automatic Account Management Enabled** = Enabled, target = a new custom account, name `studentX-admin`. Sync and run `Invoke-LapsPolicyProcessing` again.
+5. Fix `studentX-LAPS`: let Windows LAPS create and manage the account itself – **Automatic Account Management Enabled** = Enabled, target = a new custom account, name `flaneX-admin`. Sync and run `Invoke-LapsPolicyProcessing` again.
 6. Intune admin center → Devices → `CL3-yourname` → **Local admin password**: account name, last rotation, password.
 
 ### Part B – Endpoint Privilege Management
