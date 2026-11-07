@@ -41,7 +41,7 @@ lab:
    PowerShell.exe -ExecutionPolicy Bypass -File .\Get-IntunePolicyAssignmentsByGroup.ps1 -GroupName studentXdevices -ExportCsv
    ```
 
-6. Objects that reach nobody – filter the CSV on `studentX-`:
+6. Objects that reach nobody – filter the CSV on `flaneX-`:
 
    ```powershell
    PowerShell.exe -ExecutionPolicy Bypass -File .\Find-UnassignedIntuneObjects.ps1 -ExportCsv
@@ -55,13 +55,13 @@ lab:
    PowerShell.exe -ExecutionPolicy Bypass -File .\Export-IntuneReport.ps1 -ListPresets
    ```
 
-8. Export the results of your remediation `studentX-Reg` from Lab 6.1 (remediation ID from the browser address bar):
+8. Export the results of your remediation `flaneX-Reg` from Lab 6.1 (remediation ID from the browser address bar):
 
    ```powershell
    PowerShell.exe -ExecutionPolicy Bypass -File .\Export-IntuneReport.ps1 -Preset RemediationResults -PolicyId <remediation ID>
    ```
 
-9. Export the install status of your app `studentX-CMTrace` from Lab 5.1:
+9. Export the install status of your app `flaneX-CMTrace` from Lab 5.1:
 
    ```powershell
    PowerShell.exe -ExecutionPolicy Bypass -File .\Export-IntuneReport.ps1 -Preset AppInstallStatusByDevice -ApplicationId <app ID>
@@ -71,7 +71,7 @@ lab:
 
 ### Part D – Live from the device
 
-11. Intune admin center → Devices → `CL3-yourname` → **Device query**: check the state that `studentX-Reg` enforces and the IME service.
+11. Intune admin center → Devices → `CL3-yourname` → **Device query**: check the state that `flaneX-Reg` enforces and the IME service.
 
     ```text
     WindowsRegistry('HKEY_LOCAL_MACHINE\\SOFTWARE\\flaneX\\Lab')

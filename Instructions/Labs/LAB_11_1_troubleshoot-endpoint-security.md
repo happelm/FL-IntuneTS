@@ -21,9 +21,9 @@ lab:
 
    | Policy | Type | Settings |
    |---|---|---|
-   | `studentX-ASR Audit` | Attack surface reduction → Attack Surface Reduction Rules | **Block process creations originating from PSExec and WMI commands** = **Audit** |
-   | `studentX-BitLocker` | Disk encryption → BitLocker | Require device encryption, silent encryption of the OS drive, recovery key backup to Microsoft Entra ID |
-   | `studentX-AV` | Antivirus → Microsoft Defender Antivirus | Exclusion for the folder `C:\Source` |
+   | `flaneX-ASR Audit` | Attack surface reduction → Attack Surface Reduction Rules | **Block process creations originating from PSExec and WMI commands** = **Audit** |
+   | `flaneX-BitLocker` | Disk encryption → BitLocker | Require device encryption, silent encryption of the OS drive, recovery key backup to Microsoft Entra ID |
+   | `flaneX-AV` | Antivirus → Microsoft Defender Antivirus | Exclusion for the folder `C:\Source` |
 
 2. Sync CL3.
 
@@ -43,7 +43,7 @@ lab:
    Get-MpPreference | Select-Object -ExpandProperty ExclusionPath
    ```
 
-5. Intune admin center → Endpoint security → Antivirus → `studentX-AV` → device status. Then Devices → `CL3-yourname` → Device configuration: is any policy in **Conflict**? Open it and note which setting collides with which policy.
+5. Intune admin center → Endpoint security → Antivirus → `flaneX-AV` → device status. Then Devices → `CL3-yourname` → Device configuration: is any policy in **Conflict**? Open it and note which setting collides with which policy.
 
 ### Part C – ASR rule in audit mode
 

@@ -15,7 +15,7 @@ lab:
 
 ### Part A – Windows LAPS
 
-1. Intune admin center → Endpoint security → Account protection → Create policy → Windows → **Local admin password solution (Windows LAPS)**: policy `studentX-LAPS`, assigned to `studentXdevices`:
+1. Intune admin center → Endpoint security → Account protection → Create policy → Windows → **Local admin password solution (Windows LAPS)**: policy `flaneX-LAPS`, assigned to `studentXdevices`:
 
    | Setting | Value |
    |---|---|
@@ -36,7 +36,7 @@ lab:
    Get-LapsDiagnostics -OutputFolder C:\LapsDiag
    ```
 
-5. Fix `studentX-LAPS`: let Windows LAPS create and manage the account itself – **Automatic Account Management Enabled** = Enabled, target = a new custom account, name `flaneX-admin`. Sync and run `Invoke-LapsPolicyProcessing` again.
+5. Fix `flaneX-LAPS`: let Windows LAPS create and manage the account itself – **Automatic Account Management Enabled** = Enabled, target = a new custom account, name `flaneX-admin`. Sync and run `Invoke-LapsPolicyProcessing` again.
 6. Intune admin center → Devices → `CL3-yourname` → **Local admin password**: account name, last rotation, password.
 
 ### Part B – Endpoint Privilege Management
@@ -48,8 +48,8 @@ lab:
    ```
 
 8. Intune admin center → Endpoint security → Endpoint Privilege Management, assigned to `studentXdevices`:
-   - **Windows elevation settings policy** `studentX-EPM Settings`: EPM **Enabled**, default elevation response **Deny all requests**.
-   - **Windows elevation rules policy** `studentX-EPM Rules`: one rule for `cmtrace.exe` with the hash from step 7, elevation type **User confirmed**.
+   - **Windows elevation settings policy** `flaneX-EPM Settings`: EPM **Enabled**, default elevation response **Deny all requests**.
+   - **Windows elevation rules policy** `flaneX-EPM Rules`: one rule for `cmtrace.exe` with the hash from step 7, elevation type **User confirmed**.
 9. Sync CL3. Once the EPM agent is installed, check what it received:
 
    ```powershell

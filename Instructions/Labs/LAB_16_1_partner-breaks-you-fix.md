@@ -17,8 +17,8 @@ lab:
 
 | Round | Cards from | Object name | Time |
 |---|---|---|---|
-| 1 | Apps, scripts, remediations, configuration (Days 1–2) | `studentX-Case1` | 25 min |
-| 2 | Endpoint security, LAPS, EPM (Days 2–3) | `studentX-Case2` | 25 min |
+| 1 | Apps, scripts, remediations, configuration (Days 1–2) | `flaneX-Case1` | 25 min |
+| 2 | Endpoint security, LAPS, EPM (Days 2–3) | `flaneX-Case2` | 25 min |
 
 Each card describes one Intune object with exactly one wrong setting. You build it for your partner's CL3 – your partner builds one for yours. You don't tell your partner what is on your card.
 
@@ -38,14 +38,14 @@ Each card describes one Intune object with exactly one wrong setting. You build 
 5. Find the cause on CL3 and in the Intune admin center: IME logs, registry, event log, `Get-MpPreference`, LAPS cycle, `Get-Policies`, Device query – whatever the object type needs. Compare with what CL3 logged in your own labs.
 6. Write down the root cause, the evidence (log line, event ID, registry value, cmdlet output or portal status) and the fix.
 7. Check your result with your partner's card, then with the trainer.
-8. Clean up: delete your `studentX-Case1` or `studentX-Case2`.
+8. Clean up: delete your `flaneX-Case1` or `flaneX-Case2`.
 
 ### Checkpoint
 
 - [ ] Round 1: root cause, evidence and fix named, confirmed by your partner's card
 - [ ] Round 2: root cause, evidence and fix named, confirmed by your partner's card
 - [ ] The new object found with the toolbox device view in both rounds
-- [ ] `studentX-Case1` and `studentX-Case2` deleted
+- [ ] `flaneX-Case1` and `flaneX-Case2` deleted
 
 <details markdown="1">
 <summary>Hint 1 – where to start</summary>

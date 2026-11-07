@@ -13,7 +13,7 @@ lab:
 
 **Goal:** Answer the three questions of every compliance ticket – what is the state now, since when, and who changed what – with a Graph export, the audit log and the Intune Data Warehouse in Excel.
 
-**Starting point:** In Lab 7.1 you made CL3 noncompliant with `studentX-MinOS` and repaired it. That is your incident. The scripts are in `C:\Toolbox` from Lab 13.2, the Excel queries in `C:\Toolbox\DataWarehouse`.
+**Starting point:** In Lab 7.1 you made CL3 noncompliant with `flaneX-MinOS` and repaired it. That is your incident. The scripts are in `C:\Toolbox` from Lab 13.2, the Excel queries in `C:\Toolbox\DataWarehouse`.
 
 ### Part A – Now: snapshot with Graph
 
@@ -42,7 +42,7 @@ lab:
 
 ### Part C – Who changed what
 
-7. Intune admin center → Tenant administration → **Audit logs**: filter on the last 7 days and find the changes to `studentX-MinOS` from Lab 7.1. Who changed what, and when? The actor is your sign-in user `flaneX`, the object carries your prefix `studentX-`.
+7. Intune admin center → Tenant administration → **Audit logs**: filter on the last 7 days and find the changes to `flaneX-MinOS` from Lab 7.1. Who changed what, and when?
 8. Fill in the table: which source answers which question?
 
    | Question | Graph export | Data Warehouse | Audit log |
@@ -56,7 +56,7 @@ lab:
 
 - [ ] Compliance snapshot as CSV, CL3 and CL4 found
 - [ ] Compliance trend as CSV and as line chart in Excel
-- [ ] Change to `studentX-MinOS` found in the audit log with time and account
+- [ ] Change to `flaneX-MinOS` found in the audit log with time and account
 - [ ] Table filled in
 
 **Note:** The Data Warehouse is refreshed once a day – a device that was noncompliant for an hour between two snapshots may not show up in the trend. The compliance trend is tenant-wide: in the shared training tenant you see the devices of all participants. Microsoft Graph can't be a Power Query data source, which is why Excel uses the Data Warehouse OData feed.

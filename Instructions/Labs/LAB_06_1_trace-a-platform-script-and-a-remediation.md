@@ -13,7 +13,7 @@ lab:
 
 ### Part A – Platform script and remediation on the schedule
 
-1. Intune admin center → Devices → Scripts and remediations → Platform scripts → Add → Windows 10 and later: platform script `studentX-Folder` with `createtestfolder.ps1` from the [Labfiles](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles), assigned to `studentXdevices`:
+1. Intune admin center → Devices → Scripts and remediations → Platform scripts → Add → Windows 10 and later: platform script `flaneX-Folder` with `createtestfolder.ps1` from the [Labfiles](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles), assigned to `studentXdevices`:
 
    | Setting | Value |
    |---|---|
@@ -22,7 +22,7 @@ lab:
    | Run script in 64-bit PowerShell host | No |
 
 2. In `Detect-LabKey.ps1` and `Remediate-LabKey.ps1` from the Labfiles, replace `flaneX` in the registry key with your user name (for example `flane3`). Read both: which exit code means compliant, which one starts the remediation?
-3. Intune admin center → Devices → Scripts and remediations → Remediations → **Create script package**: `studentX-Reg` with both scripts, assigned to `studentXdevices`, schedule **Hourly**:
+3. Intune admin center → Devices → Scripts and remediations → Remediations → **Create script package**: `flaneX-Reg` with both scripts, assigned to `studentXdevices`, schedule **Hourly**:
 
    | Setting | Value |
    |---|---|
@@ -36,27 +36,27 @@ lab:
    Restart-Service -Name IntuneManagementExtension
    ```
 
-5. Follow `studentX-Folder` in `IntuneManagementExtension.log` and `AgentExecutor.log`.
-6. Follow `studentX-Reg` in `HealthScripts.log`: detection, remediation, detection again.
+5. Follow `flaneX-Folder` in `IntuneManagementExtension.log` and `AgentExecutor.log`.
+6. Follow `flaneX-Reg` in `HealthScripts.log`: detection, remediation, detection again.
 7. Intune admin center: compare the device status of both scripts for CL3.
 
 ### Part B – Remediation on demand
 
-8. CL3, elevated PowerShell: break what `studentX-Reg` fixed.
+8. CL3, elevated PowerShell: break what `flaneX-Reg` fixed.
 
    ```powershell
    Remove-Item -Path 'HKLM:\SOFTWARE\flaneX\Lab' -Recurse -Force
    ```
 
-9. Do not wait for the schedule: Intune admin center → Devices → All devices → `CL3-yourname` → … → **Run remediation** → `studentX-Reg`.
+9. Do not wait for the schedule: Intune admin center → Devices → All devices → `CL3-yourname` → … → **Run remediation** → `flaneX-Reg`.
 10. CL3: follow the run in `HealthScripts.log` in `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs` and check that the key is back.
-11. Intune admin center → Remediations → `studentX-Reg` → Device status: add the columns for the detection output before and after the remediation.
+11. Intune admin center → Remediations → `flaneX-Reg` → Device status: add the columns for the detection output before and after the remediation.
 
 ### Checkpoint
 
 - [ ] `C:\TestFolder` exists on CL3
-- [ ] Exit code of `studentX-Folder` found in `AgentExecutor.log`
-- [ ] `studentX-Reg`: issue found, then fixed – `HKLM\SOFTWARE\flaneX\Lab` exists on CL3
+- [ ] Exit code of `flaneX-Folder` found in `AgentExecutor.log`
+- [ ] `flaneX-Reg`: issue found, then fixed – `HKLM\SOFTWARE\flaneX\Lab` exists on CL3
 - [ ] Run on demand: `HKLM\SOFTWARE\flaneX\Lab` deleted and back again, without waiting for the schedule
 - [ ] Device status shows **Issue fixed** with the output of both detection runs
 

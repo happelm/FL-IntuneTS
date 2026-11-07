@@ -21,7 +21,7 @@ lab:
 2. Pick one question your toolbox from Lab 13.2 does not answer, for example:
    - Which Windows devices in `studentXdevices` haven't synced for more than 7 days?
    - Which settings catalog policies contain a setting with `BitLocker` in its name, and to which groups are they assigned?
-   - On which devices did the detection script of `studentX-Reg` report an issue in the last 24 hours?
+   - On which devices did the detection script of `flaneX-Reg` report an issue in the last 24 hours?
 3. Write the prompt with these five parts:
 
    | Part | Example |

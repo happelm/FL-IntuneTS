@@ -18,14 +18,14 @@ lab:
 >
 > **Copy and paste:** copy with **Ctrl+Shift+Alt+C** and paste with **Ctrl+Shift+Alt+V**. The normal Ctrl+C / Ctrl+V don't work between your computer and the remote lab.
 
-1. Look up your user `flaneX` and your number X in `course.txt` from the trainer. Your groups and object prefix use the same number: `studentXdevices`, `studentXusers`, `studentX-`.
+1. Look up your user `flaneX` and your number X in `course.txt` from the trainer. Your groups use the same number: `studentXdevices` and `studentXusers`.
 2. CL3 and CL4 start at OOBE. When OOBE asks for the device name, enter `CL3-yourname` and `CL4-yourname`. Choose any privacy settings.
 
    > ⌨ **Online participants – keyboard layout question:** choose **English (US)**, even if you sit at a German keyboard. If `@` or `-` still don't work: **Shift+F10** → `osk` → Enter opens the on-screen keyboard.
 
 3. Sign in with `flaneX` as work or school account – this joins the client to Microsoft Entra ID. Complete MFA and set up Windows Hello with a PIN when Windows asks for it.
 4. Entra admin center → Groups → `studentXdevices` → Members: add `CL3-yourname` and `CL4-yourname`.
-5. From now on, every object you create in the tenant starts with `studentX-`.
+5. From now on, every object you create in the tenant starts with `flaneX-`.
 
 ### Checkpoint
 

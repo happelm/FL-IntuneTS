@@ -79,11 +79,11 @@ One shared training tenant – your objects carry your number, nobody touches an
 | SRV1 | Member server in `training.flane` (trainer's pod) | Trainer demo only |
 | Azure file share | `\\flane.file.core.windows.net\labfiles` – Microsoft Entra Kerberos | Lab files; reachable from CL3 and CL4 only, no line of sight to `training.flane` needed (Labs 2.1, 8.1) |
 
-X is your participant number from `course.txt`. User `flane3` works with `student3devices`, `student3users` and the prefix `student3-`. Passwords are handed out by the trainer.
+X is your participant number from `course.txt`. User `flane3` works with the groups `student3devices` and `student3users`; everything `flane3` creates starts with `flane3-`. Passwords are handed out by the trainer.
 
 ### Naming
 
-Every policy, profile, app and script you create starts with `studentX-` (for example `student3-CMTrace`), so every object is unique and you find your own.
+Every policy, profile, app and script you create starts with `flaneX-` (for example `flane3-CMTrace`), so every object is unique and you find your own.
 
 ### Your permissions
 
