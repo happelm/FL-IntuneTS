@@ -8,7 +8,7 @@ The lab files share `\\flane.file.core.windows.net\labfiles` serves CL3/CL4 in L
 
 ### 1. DC1 – Microsoft Entra Kerberos server object
 
-The pod domain `training.flane` needs the Microsoft Entra Kerberos server object for cloud Kerberos trust. Lab 8.1 and the DC1 demo use it for Windows Hello sign-in to on-premises resources.
+The pod domain `training.flane` needs the Microsoft Entra Kerberos server object for cloud Kerberos trust. Lab 8.1 and the DC1 demo use it for Windows Hello sign-in to on-premises resources. The Azure Files share itself doesn't need it: CL3/CL4 reach the share without line of sight to DC1.
 
 On DC1, in an elevated PowerShell (module `AzureADHybridAuthenticationManagement`):
 
