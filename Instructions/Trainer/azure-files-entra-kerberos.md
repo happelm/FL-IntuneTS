@@ -33,7 +33,15 @@ In the Azure portal, open the storage account and go to **File shares** > **Iden
 
 ### 4. Storage account app – cloud group SIDs
 
-In the same app, open **Manifest** and add `kdc_enable_cloud_group_sids` to the `tags` array, then save. Without the tag, the Kerberos ticket carries no cloud group SIDs, so permissions granted to cloud groups don't apply. See [Group SID limit in Entra Kerberos](https://learn.microsoft.com/entra/identity/authentication/kerberos#group-sid-limit-in-entra-kerberos-preview).
+In the same app, open **Manifest**, add the tag to the `tags` array, then save:
+
+```json
+"tags": [
+    "kdc_enable_cloud_group_sids"
+]
+```
+
+If `tags` already holds values, keep them and add the tag to the list. Without the tag, the Kerberos ticket carries no cloud group SIDs, so permissions granted to cloud groups don't apply. See [Group SID limit in Entra Kerberos](https://learn.microsoft.com/entra/identity/authentication/kerberos#group-sid-limit-in-entra-kerberos-preview).
 
 ### 5. Conditional Access – exclude the storage app from MFA
 
@@ -42,7 +50,7 @@ Exclude **[Storage Account] flane.file.core.windows.net** from every Conditional
 ### 6. Permissions
 
 - **Share level (Azure RBAC):** **Storage File Data SMB Share Reader** on the share, assigned to the participant group **All StudentUsr Groups**.
-- **Directory and file level (NTFS):** matching read permissions on the share root. For hybrid identities, set NTFS permissions from a machine with line of sight to DC1, for example CL1 in the trainer pod.
+- **Directory and file level (NTFS):** **Read & execute** on the share root for the same group. For hybrid identities, set NTFS permissions from a machine with line of sight to DC1, for example CL1 in the trainer pod.
 
 ### 7. Clients CL3/CL4
 
