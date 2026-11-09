@@ -55,6 +55,10 @@ Windows LAPS and Endpoint Privilege Management on the client; Microsoft Graph an
 
 [Log map, collecting logs](Instructions/Appendix.md)
 
+### Trainer notes
+
+[Azure Files share and Microsoft Entra Kerberos](Instructions/Trainer/azure-files-entra-kerberos.md) – setup checklist for the lab files share
+
 ### Resources
 
 [Intune-TS link collection](https://github.com/happelm/Intune-Resources/blob/main/Intune3Links.md) – Learn articles, blogs and tools for this workshop.
