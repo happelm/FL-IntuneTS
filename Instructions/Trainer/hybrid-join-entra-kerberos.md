@@ -2,9 +2,22 @@
 
 The trainer pod shows Microsoft Entra hybrid join and Windows Hello for Business cloud Kerberos trust on CL1 and CL2 in `training.flane`. Participants' CL3/CL4 are Microsoft Entra joined only; this setup is a trainer demo.
 
-**Before each course: check only.** SCP, sync scope and the Kerberos server object stay in place. Use the checklist after a rebuild of the trainer pod.
+CL1 and CL2 join with **Microsoft Entra hybrid join using Microsoft Entra Kerberos (preview)**. The device gets its Entra ID object directly during the join, without AD FS and without Microsoft Entra Connect syncing the computer object. See [Microsoft Entra hybrid join using Microsoft Entra Kerberos](https://learn.microsoft.com/entra/identity/devices/how-to-hybrid-join-using-microsoft-entra-kerberos).
 
-## 1. Service connection point (SCP) on DC1
+**Before each course: check only.** SCP, the Kerberos server object, the trusted domain object and the service principal settings stay in place. Use the checklist after a rebuild of the trainer pod.
+
+## 1. Requirements
+
+| Component | Requirement |
+|---|---|
+| Domain controller | At least one DC with Windows Server 2025 build 26100.6905 or later in `training.flane` |
+| CL1, CL2 | Windows 11 build 26100.6584 or later, domain joined, line of sight to that DC during the join |
+| AD account | Domain Admins and Enterprise Admins |
+| Entra roles | Hybrid Identity Administrator (Kerberos objects), Application Administrator (service principal) |
+
+Check the build with `winver` on DC1, CL1 and CL2.
+
+## 2. Service connection point (SCP) on DC1
 
 Run [`ConfigureSCP.ps1`](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles/Trainer) on DC1 as Enterprise Admin. Use the tenant's `*.onmicrosoft.com` domain (no federation) and the tenant ID from Entra admin center → Overview.
 
@@ -14,51 +27,101 @@ Run [`ConfigureSCP.ps1`](https://github.com/happelm/FL-IntuneTS/tree/main/Labfil
 
 The SCP is forest-wide: `CN=62a0ff2e-97b9-4513-943f-0d221bd30080` under `CN=Device Registration Configuration,CN=Services` in the configuration partition. Check it in ADSI Edit (Configuration partition) → attribute `keywords` holds `azureADName:` and `azureADId:`.
 
-## 2. Sync scope
+## 3. Microsoft Entra Kerberos server object and trusted domain object
 
-The sync from DC1 must include the OU of the computer objects CL1 and CL2, not only the user OU.
-
-## 3. Hybrid join CL1 and CL2
-
-On CL1 and CL2, start the join task (or run `dsregcmd /join` in an elevated prompt):
-
-```powershell
-Start-ScheduledTask -TaskPath '\Microsoft\Windows\Workplace Join\' -TaskName 'Automatic-Device-Join'
-```
-
-The first run writes `userCertificate` on the computer object; the sync then creates the device in Entra ID. Start the task a second time once the device is in Entra ID. Check with `dsregcmd /status`: `AzureAdJoined : YES` and `DomainJoined : YES`. Sign out and in again, then `AzureAdPrt : YES`.
-
-## 4. Microsoft Entra Kerberos server object
-
-On DC1 (or the sync server), elevated Windows PowerShell. Install the module ([Learn](https://learn.microsoft.com/entra/identity/authentication/howto-authentication-passwordless-security-key-on-premises#install-the-azureadhybridauthenticationmanagement-module)):
+On DC1, elevated Windows PowerShell. Install the module ([Learn](https://learn.microsoft.com/entra/identity/authentication/howto-authentication-passwordless-security-key-on-premises#install-the-azureadhybridauthenticationmanagement-module)):
 
 ```powershell
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 Install-Module -Name AzureADHybridAuthenticationManagement -AllowClobber
 ```
 
-Create the object and check it ([Learn](https://learn.microsoft.com/entra/identity/authentication/howto-authentication-passwordless-security-key-on-premises#create-a-kerberos-server-object)). Use the UPN of a Hybrid Identity Administrator or Global Administrator; sign in with MFA when prompted. For the domain credential, enter the domain admin in UPN format.
+Create the Kerberos server object and the trusted domain object in one step with `-SetupCloudTrust` ([Learn](https://learn.microsoft.com/azure/azure-sql/managed-instance/winauth-azuread-setup-incoming-trust-based-flow#create-and-configure-the-microsoft-entra-kerberos-trusted-domain-object)). If the Kerberos server object already exists, the same command adds only the trusted domain object. Use the UPN of a Hybrid Identity Administrator; sign in with MFA when prompted. For the domain credential, enter the domain admin in UPN format.
 
 ```powershell
-$domain = 'training.flane'
-$upn    = '<admin UPN>'
-Set-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn -DomainCredential (Get-Credential)
-Get-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn -DomainCredential (Get-Credential)
+$domain     = 'training.flane'
+$upn        = '<admin UPN>'
+$domainCred = Get-Credential
+Set-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn -DomainCredential $domainCred -SetupCloudTrust
+Get-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn -DomainCredential $domainCred
 ```
 
-`Get-AzureADKerberosServer` shows the object with a `KeyVersion`. An empty result means it is not configured.
+`Get-AzureADKerberosServer` shows the object with a `KeyVersion`, and `CloudTrustDisplay` shows `Microsoft.AzureAD.Kdc.Service.TrustDisplay`. An empty `CloudTrustDisplay` means the trusted domain object is missing. The same Kerberos server object serves Windows Hello for Business cloud Kerberos trust (section 6).
 
-## 5. Windows Hello for Business with cloud Kerberos trust
+## 4. Device Registration Service principal
 
-Settings catalog policy for the devices or users of CL1/CL2 ([Learn](https://learn.microsoft.com/windows/security/identity-protection/hello-for-business/deploy/hybrid-cloud-kerberos-trust#configure-windows-hello-for-business-policy-settings)):
+The Microsoft Entra Device Registration Service principal needs the SPN `adrs/enterpriseregistration.windows.net` and the tag `KerberosPolicy:ExchangeForJwt`. Install [Microsoft Entra PowerShell](https://learn.microsoft.com/powershell/entra-powershell/installation) in an elevated session:
 
-| Setting | Value |
+```powershell
+Install-Module -Name Microsoft.Entra -Repository PSGallery -Scope AllUsers -Force -AllowClobber
+```
+
+Then run the script from [Learn](https://learn.microsoft.com/entra/identity/devices/how-to-hybrid-join-using-microsoft-entra-kerberos#configure-microsoft-entra-device-registration-service-principal) and sign in as Application Administrator. It adds only what is missing and shows the result.
+
+```powershell
+Connect-Entra -Environment 'Global' -Scopes 'Application.ReadWrite.All'
+
+$drsSP = Get-EntraServicePrincipal -Filter "AppId eq '01cb2876-7ebd-4aa4-9cc9-d28bd4d359a9'"
+
+$needsUpdate = $false
+$spns = [System.Collections.Generic.List[string]]::new($drsSP.ServicePrincipalNames)
+$tags = [System.Collections.Generic.List[string]]::new($drsSP.Tags)
+
+$kerbSpn = 'adrs/enterpriseregistration.windows.net'
+if ($drsSP.ServicePrincipalNames -notcontains $kerbSpn) {
+    Write-Host 'Kerberos SPN needs to be added'
+    $spns.Add($kerbSpn)
+    $needsUpdate = $true
+}
+
+$kerberosTag = 'KerberosPolicy:ExchangeForJwt'
+if ($drsSP.Tags -notcontains $kerberosTag) {
+    Write-Host 'Kerberos policy tag needs to be added'
+    $tags.Add($kerberosTag)
+    $needsUpdate = $true
+}
+
+if ($needsUpdate) {
+    Set-EntraServicePrincipal -ObjectId $drsSP.Id -ServicePrincipalNames $spns -Tags $tags
+    Write-Host 'Service principal configuration updated'
+} else {
+    Write-Host 'Service principal already configured'
+}
+
+$drsSP = Get-EntraServicePrincipal -Filter "AppId eq '01cb2876-7ebd-4aa4-9cc9-d28bd4d359a9'"
+$drsSP.ServicePrincipalNames
+$drsSP.Tags
+```
+
+**KDC proxy GPO:** only needed if CL1/CL2 already get the policy **Administrative Templates\System\Kerberos\Specify KDC proxy servers for Kerberos clients**. In that case add the mapping from [Learn](https://learn.microsoft.com/entra/identity/devices/how-to-hybrid-join-using-microsoft-entra-kerberos#configure-the-kdc-proxy-server-gpo). Otherwise skip it.
+
+## 5. Hybrid join CL1 and CL2
+
+CL1 and CL2 are domain joined. After a restart, the join runs on its own. To start it right away, run in an elevated prompt:
+
+```powershell
+Start-ScheduledTask -TaskPath '\Microsoft\Windows\Workplace Join\' -TaskName 'Automatic-Device-Join'
+```
+
+Or run `dsregcmd /join`. The device appears in Entra ID right after the join; the computer OU doesn't need to be in the sync scope. Check with `dsregcmd /status`: `AzureAdJoined : YES` and `DomainJoined : YES`. Sign out and in again, then `AzureAdPrt : YES`.
+
+## 6. Windows Hello for Business with cloud Kerberos trust
+
+Two settings are required, a third is recommended ([Learn](https://learn.microsoft.com/windows/security/identity-protection/hello-for-business/deploy/hybrid-cloud-kerberos-trust#configure-windows-hello-for-business-policy-settings)). Deliver them with **one** of the two sources:
+
+- **Intune** (Settings catalog, devices or users of CL1/CL2): only if CL1/CL2 are enrolled in Intune.
+- **GPO** on DC1 (Computer Configuration\Administrative Templates\Windows Components\Windows Hello for Business): cloud Kerberos trust exists only as a computer setting. If the setting is missing, copy `Passport.admx`/`Passport.adml` from a current Windows 11 client to the central store.
+
+| Setting (Intune / GPO) | Value |
 |---|---|
-| Windows Hello for Business → Use Windows Hello For Business | true |
-| Windows Hello for Business → Use Cloud Trust For On Prem Auth | Enabled |
-| Windows Hello for Business → Require Security Device | true |
+| Use Windows Hello For Business / Use Windows Hello for Business | true / Enabled |
+| Use Cloud Trust For On Prem Auth / Use cloud Kerberos trust for on-premises authentication | Enabled |
+| Require Security Device / Use a hardware security device | true / Enabled |
 
-CL1/CL2 must not get **Use certificate for on-premises authentication**, and no Windows Hello GPO from DC1 – Group Policy wins over Intune for Windows Hello.
+- Group Policy wins over Intune for Windows Hello. If both deliver settings, Intune is ignored.
+- CL1/CL2 must not get **Use certificate for on-premises authentication**.
+- Use a `flaneX` user. Members of privileged built-in groups (for example Domain Admins) can't use cloud Kerberos trust.
+- The user sets up the PIN with MFA. The first PIN sign-in needs line of sight to DC1.
 
 ## Quick check
 
