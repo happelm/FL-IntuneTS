@@ -17,9 +17,9 @@ CL1 and CL2 join with **Microsoft Entra hybrid join using Microsoft Entra Kerber
 
 Check the build with `winver` on DC1, CL1 and CL2.
 
-## 2. Service connection point (SCP) on DC1
+## 2. Service connection point (SCP) on SRV1
 
-Run [`ConfigureSCP.ps1`](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles/Trainer) on DC1 as Enterprise Admin. Use the tenant's `*.onmicrosoft.com` domain (no federation) and the tenant ID from Entra admin center → Overview.
+Run [`ConfigureSCP.ps1`](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles/Trainer) on SRV1, signed in as Enterprise Admin. The script writes to AD over LDAP, so any domain member works. Use the tenant's `*.onmicrosoft.com` domain (no federation) and the tenant ID from Entra admin center → Overview.
 
 ```powershell
 .\ConfigureSCP.ps1 -Domain <tenant>.onmicrosoft.com -TenantId <tenant ID>
@@ -29,14 +29,14 @@ The SCP is forest-wide: `CN=62a0ff2e-97b9-4513-943f-0d221bd30080` under `CN=Devi
 
 ## 3. Microsoft Entra Kerberos server object and trusted domain object
 
-On DC1, elevated Windows PowerShell. Install the module ([Learn](https://learn.microsoft.com/entra/identity/authentication/howto-authentication-passwordless-security-key-on-premises#install-the-azureadhybridauthenticationmanagement-module)):
+Run sections 3 and 4 on SRV1, signed in as a Domain Admin and Enterprise Admin. In an elevated Windows PowerShell, install the module ([Learn](https://learn.microsoft.com/entra/identity/authentication/howto-authentication-passwordless-security-key-on-premises#install-the-azureadhybridauthenticationmanagement-module)):
 
 ```powershell
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 Install-Module -Name AzureADHybridAuthenticationManagement -AllowClobber
 ```
 
-Create the Kerberos server object and the trusted domain object in one step with `-SetupCloudTrust` ([Learn](https://learn.microsoft.com/azure/azure-sql/managed-instance/winauth-azuread-setup-incoming-trust-based-flow#create-and-configure-the-microsoft-entra-kerberos-trusted-domain-object)). If the Kerberos server object already exists, the same command adds only the trusted domain object. Use the UPN of a Hybrid Identity Administrator; sign in with MFA when prompted. Sign in to DC1 as a Domain Admin and Enterprise Admin; the commands then use your current sign-in, so `-DomainCredential` isn't needed.
+Create the Kerberos server object and the trusted domain object in one step with `-SetupCloudTrust` ([Learn](https://learn.microsoft.com/azure/azure-sql/managed-instance/winauth-azuread-setup-incoming-trust-based-flow#create-and-configure-the-microsoft-entra-kerberos-trusted-domain-object)). If the Kerberos server object already exists, the same command adds only the trusted domain object. Use the UPN of a Hybrid Identity Administrator; sign in with MFA when prompted. The commands use your current domain sign-in, so `-DomainCredential` isn't needed.
 
 ```powershell
 $domain     = 'training.flane'
@@ -51,7 +51,7 @@ Get-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn
 
 The Microsoft Entra Device Registration Service principal needs the SPN `adrs/enterpriseregistration.windows.net` and the tag `KerberosPolicy:ExchangeForJwt`. Use **PowerShell 7** (`pwsh`) for this step, not Windows PowerShell 5.1; Learn recommends PowerShell 7 for Microsoft Entra PowerShell.
 
-If PowerShell 7 is missing on DC1, install the MSI package ([Learn](https://learn.microsoft.com/powershell/scripting/install/install-powershell-on-windows)). On Windows Server 2025 with Desktop Experience, run in an elevated prompt:
+If PowerShell 7 is missing on SRV1, install the MSI package ([Learn](https://learn.microsoft.com/powershell/scripting/install/install-powershell-on-windows)). On Windows Server 2025 with Desktop Experience, run in an elevated prompt:
 
 ```powershell
 winget install --id Microsoft.PowerShell --source winget --installer-type wix
