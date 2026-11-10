@@ -45,7 +45,7 @@ Set-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn -SetupCloudTru
 Get-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn
 ```
 
-`Get-AzureADKerberosServer` shows the object with a `KeyVersion`, and `CloudTrustDisplay` shows `Microsoft.AzureAD.Kdc.Service.TrustDisplay`. An empty `CloudTrustDisplay` means the trusted domain object is missing. The same Kerberos server object serves Windows Hello for Business cloud Kerberos trust (section 6).
+`Get-AzureADKerberosServer` shows the object with a `KeyVersion`, and `CloudTrustDisplay` shows `Microsoft.AzureAD.Kdc.Service.TrustDisplay`. An empty `CloudTrustDisplay` means the trusted domain object is missing. The same Kerberos server object serves Windows Hello for Business cloud Kerberos trust (section 7).
 
 ## 4. Device Registration Service principal
 
@@ -114,7 +114,15 @@ Start-ScheduledTask -TaskPath '\Microsoft\Windows\Workplace Join\' -TaskName 'Au
 
 Or run `dsregcmd /join`. The device appears in Entra ID right after the join; the computer OU doesn't need to be in the sync scope. Check with `dsregcmd /status`: `AzureAdJoined : YES` and `DomainJoined : YES`. Sign out and in again, then `AzureAdPrt : YES`.
 
-## 6. Windows Hello for Business with cloud Kerberos trust
+## 6. Co-management on SCCM – before Windows Hello
+
+CL1 and CL2 run the Configuration Manager client (site FLN). After the hybrid join they're co-managed, and Intune policies apply only to workloads that are switched to Intune. Settings catalog policies follow the **Device Configuration** workload ([Learn](https://learn.microsoft.com/intune/configmgr/comanage/workloads#device-configuration)).
+
+1. On SCCM, in the Configuration Manager console, go to **Administration** > **Cloud Services** > **Cloud Attach**. If no co-management object exists yet, select **Configure Cloud Attach** and enable automatic enrollment in Intune for **All** ([Learn](https://learn.microsoft.com/intune/configmgr/cloud-attach/enable)).
+2. Select the co-management object > **Properties** > **Workloads**. Move all sliders to **Intune** ([Learn](https://learn.microsoft.com/intune/configmgr/comanage/how-to-switch-workloads#switch-workloads)).
+3. In the Intune admin center, check that CL1 and CL2 appear as co-managed and that the Windows Hello policy from section 7 shows **Succeeded** for both devices.
+
+## 7. Windows Hello for Business with cloud Kerberos trust
 
 Settings catalog policy for the devices or users of CL1/CL2 ([Learn](https://learn.microsoft.com/windows/security/identity-protection/hello-for-business/deploy/hybrid-cloud-kerberos-trust#configure-windows-hello-for-business-policy-settings)). CL1/CL2 must be enrolled in Intune.
 
@@ -126,6 +134,7 @@ Settings catalog policy for the devices or users of CL1/CL2 ([Learn](https://lea
 
 - CL1/CL2 must not get **Use certificate for on-premises authentication**, and no Windows Hello GPO from DC1 – Group Policy wins over Intune for Windows Hello.
 - Use a `flaneX` user. Members of privileged built-in groups (for example Domain Admins) can't use cloud Kerberos trust.
+- **Set up the PIN only after the policy has arrived** (section 6, step 3). A PIN set up right after the hybrid join, before the Intune policy applies, doesn't use cloud Kerberos trust. In that case remove the container as the user (`certutil -deletehellocontainer` in an elevated prompt of that user; temporarily add the user to local Administrators), sign out and set up the PIN again.
 - The user sets up the PIN with MFA. The first PIN sign-in needs line of sight to DC1.
 
 ## Quick check
