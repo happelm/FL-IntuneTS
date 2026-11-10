@@ -5,7 +5,7 @@
 | `Autoenroll.ps1` | 0.1 | Fallback when MDM auto-enrollment did not run: sets the Intune enrollment URLs and enrolls the device as corporate device |
 | `cmtrace.intunewin` | 5.1 | Win32 app `flaneX-CMTrace`, ready to upload: contains `cmtrace.exe`, `CmtraceInstall.ps1` and `CmtraceRemove.ps1` |
 | `CmtraceInstall.ps1`, `CmtraceRemove.ps1` | 5.1 | Install and uninstall script inside `cmtrace.intunewin`, for reference (script by Jorgen, CCMexec.com) |
-| `Detect-ReinstallCMTrace.ps1`, `Remediate-ReinstallCMTrace.ps1` | 5.2 | Remediation `flaneX-Reinstall-CMTrace`, run on demand: removes the detection file of `flaneX-CMTrace` and lets the IME reinstall it |
+| `Detect-ReinstallCMTrace.ps1`, `Remediate-ReinstallCMTrace.ps1` | 6.2 | Remediation `flaneX-Reinstall-CMTrace`, run on demand: removes the detection file of `flaneX-CMTrace` and lets the IME reinstall it |
 | `createtestfolder.ps1` | 6.1 | Platform script `flaneX-Folder`: creates `C:\TestFolder` |
 | `Detect-LabKey.ps1`, `Remediate-LabKey.ps1` | 6.1 | Remediation `flaneX-Reg`: replace `flaneX` in the registry key `HKLM\SOFTWARE\flaneX\Lab` with your user name (for example `flane3`) before you upload |
 | `Toolbox\Get-IntunePolicyAssignmentsByGroup.ps1` | 13.2, 16.1 | Read-only: every Intune object that reaches a group, a device (`-DeviceName`) or a user (`-UserPrincipalName`) |

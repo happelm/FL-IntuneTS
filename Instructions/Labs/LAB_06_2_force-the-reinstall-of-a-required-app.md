@@ -1,11 +1,11 @@
 ---
-title: 'Lab 5.2 – Force the reinstall of a required app'
+title: 'Lab 6.2 – Force the reinstall of a required app'
 lab:
-    title: 'Lab 5.2 – Force the reinstall of a required app'
+    title: 'Lab 6.2 – Force the reinstall of a required app'
     module: 'Day 2 – Apps, protect, support'
 ---
 
-# Lab 5.2 – Force the reinstall of a required app
+# Lab 6.2 – Force the reinstall of a required app
 
 **Estimated time:** 25 minutes
 

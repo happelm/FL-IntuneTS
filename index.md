@@ -34,8 +34,8 @@ App deployment and the Intune Management Extension, scripts and remediations, co
 | Lab | Title | Time |
 |---|---|---|
 | 5.1 | [Trace a Win32 app](Instructions/Labs/LAB_05_1_trace-a-win32-app.html) | 45 min |
-| 5.2 | [Force the reinstall of a required app](Instructions/Labs/LAB_05_2_force-the-reinstall-of-a-required-app.html) | 25 min |
 | 6.1 | [Trace a platform script and a remediation](Instructions/Labs/LAB_06_1_trace-a-platform-script-and-a-remediation.html) | 40 min |
+| 6.2 | [Force the reinstall of a required app](Instructions/Labs/LAB_06_2_force-the-reinstall-of-a-required-app.html) | 25 min |
 | 7.1 | [Trace a compliance block](Instructions/Labs/LAB_07_1_trace-a-compliance-block.html) | 30 min |
 | 8.1 | [Windows Hello and cloud Kerberos](Instructions/Labs/LAB_08_1_windows-hello-and-cloud-kerberos.html) | 45 min |
 | 11.1 | [Troubleshoot endpoint security](Instructions/Labs/LAB_11_1_troubleshoot-endpoint-security.html) (draft) | 75 min |
