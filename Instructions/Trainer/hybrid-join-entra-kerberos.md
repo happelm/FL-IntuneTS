@@ -49,7 +49,7 @@ Get-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn
 
 ## 4. Device Registration Service principal
 
-The Microsoft Entra Device Registration Service principal needs the SPN `adrs/enterpriseregistration.windows.net` and the tag `KerberosPolicy:ExchangeForJwt`. Install [Microsoft Entra PowerShell](https://learn.microsoft.com/powershell/entra-powershell/installation) in an elevated session:
+The Microsoft Entra Device Registration Service principal needs the SPN `adrs/enterpriseregistration.windows.net` and the tag `KerberosPolicy:ExchangeForJwt`. Use **PowerShell 7** (`pwsh`) for this step, not Windows PowerShell 5.1; Learn recommends PowerShell 7 for Microsoft Entra PowerShell. Install [Microsoft Entra PowerShell](https://learn.microsoft.com/powershell/entra-powershell/installation) in an elevated `pwsh` session:
 
 ```powershell
 Install-Module -Name Microsoft.Entra -Repository PSGallery -Scope AllUsers -Force -AllowClobber
