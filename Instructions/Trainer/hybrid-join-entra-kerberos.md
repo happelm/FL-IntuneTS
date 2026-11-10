@@ -65,8 +65,10 @@ Install-Module -Name Microsoft.Entra -Repository PSGallery -Scope AllUsers -Forc
 
 Then run the script from [Learn](https://learn.microsoft.com/entra/identity/devices/how-to-hybrid-join-using-microsoft-entra-kerberos#configure-microsoft-entra-device-registration-service-principal) and sign in as Application Administrator. It adds only what is missing and shows the result.
 
+Open a new PowerShell 7 window first. The script signs in with `Connect-MgGraph` instead of `Connect-Entra`: `Connect-Entra` in Microsoft.Entra 1.3.0 fails with a known bug ([entra-powershell #1614](https://github.com/microsoftgraph/entra-powershell/issues/1614)). `Connect-Entra` is a wrapper for `Connect-MgGraph`, and the Entra cmdlets use the same session.
+
 ```powershell
-Connect-Entra -Environment 'Global' -Scopes 'Application.ReadWrite.All'
+Connect-MgGraph -Scopes 'Application.ReadWrite.All'
 
 $drsSP = Get-EntraServicePrincipal -Filter "AppId eq '01cb2876-7ebd-4aa4-9cc9-d28bd4d359a9'"
 
