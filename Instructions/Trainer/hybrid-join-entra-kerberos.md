@@ -71,6 +71,7 @@ Open a new PowerShell 7 window first. The script signs in with `Connect-MgGraph`
 Connect-MgGraph -Scopes 'Application.ReadWrite.All'
 
 $drsSP = Get-EntraServicePrincipal -Filter "AppId eq '01cb2876-7ebd-4aa4-9cc9-d28bd4d359a9'"
+if (-not $drsSP) { throw 'Device Registration Service principal not found. Check the Connect-MgGraph sign-in.' }
 
 $needsUpdate = $false
 $spns = [System.Collections.Generic.List[string]]::new($drsSP.ServicePrincipalNames)
