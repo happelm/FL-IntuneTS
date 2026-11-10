@@ -36,14 +36,13 @@ On DC1, elevated Windows PowerShell. Install the module ([Learn](https://learn.m
 Install-Module -Name AzureADHybridAuthenticationManagement -AllowClobber
 ```
 
-Create the Kerberos server object and the trusted domain object in one step with `-SetupCloudTrust` ([Learn](https://learn.microsoft.com/azure/azure-sql/managed-instance/winauth-azuread-setup-incoming-trust-based-flow#create-and-configure-the-microsoft-entra-kerberos-trusted-domain-object)). If the Kerberos server object already exists, the same command adds only the trusted domain object. Use the UPN of a Hybrid Identity Administrator; sign in with MFA when prompted. For the domain credential, use the domain admin in UPN format. If you're signed in to DC1 as a Domain Admin and Enterprise Admin, you can leave out `-DomainCredential`.
+Create the Kerberos server object and the trusted domain object in one step with `-SetupCloudTrust` ([Learn](https://learn.microsoft.com/azure/azure-sql/managed-instance/winauth-azuread-setup-incoming-trust-based-flow#create-and-configure-the-microsoft-entra-kerberos-trusted-domain-object)). If the Kerberos server object already exists, the same command adds only the trusted domain object. Use the UPN of a Hybrid Identity Administrator; sign in with MFA when prompted. Sign in to DC1 as a Domain Admin and Enterprise Admin; the commands then use your current sign-in, so `-DomainCredential` isn't needed.
 
 ```powershell
 $domain     = 'training.flane'
 $upn        = '<admin UPN>'
-$domainCred = Get-Credential -UserName '<domain admin UPN>' -Message 'Domain Admin and Enterprise Admin'
-Set-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn -DomainCredential $domainCred -SetupCloudTrust
-Get-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn -DomainCredential $domainCred
+Set-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn -SetupCloudTrust
+Get-AzureADKerberosServer -Domain $domain -UserPrincipalName $upn
 ```
 
 `Get-AzureADKerberosServer` shows the object with a `KeyVersion`, and `CloudTrustDisplay` shows `Microsoft.AzureAD.Kdc.Service.TrustDisplay`. An empty `CloudTrustDisplay` means the trusted domain object is missing. The same Kerberos server object serves Windows Hello for Business cloud Kerberos trust (section 6).
