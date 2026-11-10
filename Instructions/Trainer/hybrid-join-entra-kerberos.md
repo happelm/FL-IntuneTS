@@ -116,19 +116,15 @@ Or run `dsregcmd /join`. The device appears in Entra ID right after the join; th
 
 ## 6. Windows Hello for Business with cloud Kerberos trust
 
-Two settings are required, a third is recommended ([Learn](https://learn.microsoft.com/windows/security/identity-protection/hello-for-business/deploy/hybrid-cloud-kerberos-trust#configure-windows-hello-for-business-policy-settings)). Deliver them with **one** of the two sources:
+Settings catalog policy for the devices or users of CL1/CL2 ([Learn](https://learn.microsoft.com/windows/security/identity-protection/hello-for-business/deploy/hybrid-cloud-kerberos-trust#configure-windows-hello-for-business-policy-settings)). CL1/CL2 must be enrolled in Intune.
 
-- **Intune** (Settings catalog, devices or users of CL1/CL2): only if CL1/CL2 are enrolled in Intune.
-- **GPO** on DC1 (Computer Configuration\Administrative Templates\Windows Components\Windows Hello for Business): cloud Kerberos trust exists only as a computer setting. If the setting is missing, copy `Passport.admx`/`Passport.adml` from a current Windows 11 client to the central store.
-
-| Setting (Intune / GPO) | Value |
+| Setting | Value |
 |---|---|
-| Use Windows Hello For Business / Use Windows Hello for Business | true / Enabled |
-| Use Cloud Trust For On Prem Auth / Use cloud Kerberos trust for on-premises authentication | Enabled |
-| Require Security Device / Use a hardware security device | true / Enabled |
+| Windows Hello for Business → Use Windows Hello For Business | true |
+| Windows Hello for Business → Use Cloud Trust For On Prem Auth | Enabled |
+| Windows Hello for Business → Require Security Device | true |
 
-- Group Policy wins over Intune for Windows Hello. If both deliver settings, Intune is ignored.
-- CL1/CL2 must not get **Use certificate for on-premises authentication**.
+- CL1/CL2 must not get **Use certificate for on-premises authentication**, and no Windows Hello GPO from DC1 – Group Policy wins over Intune for Windows Hello.
 - Use a `flaneX` user. Members of privileged built-in groups (for example Domain Admins) can't use cloud Kerberos trust.
 - The user sets up the PIN with MFA. The first PIN sign-in needs line of sight to DC1.
 
