@@ -16,6 +16,12 @@ lab:
 >
 > **On a Mac, or if a character still doesn't work:** press **Shift+F10** at OOBE, type `osk` and press Enter – the on-screen keyboard opens and you click the characters you need.
 >
+> **Already past the keyboard question with the wrong layout?** Press **Shift+F10** at OOBE, paste this line and press Enter. The layout switches to English (US) right away:
+>
+> ```powershell
+> powershell Set-WinUserLanguageList en-US -Force
+> ```
+>
 > **Copy and paste:** copy with **Ctrl+Shift+Alt+C** and paste with **Ctrl+Shift+Alt+V**. The normal Ctrl+C / Ctrl+V don't work between your computer and the remote lab.
 
 1. Look up your user `flaneX` and your number X in `course.txt` from the trainer. Your groups use the same number: `studentXdevices` and `studentXusers`.
