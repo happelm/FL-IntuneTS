@@ -17,6 +17,8 @@ CL1 and CL2 join with **Microsoft Entra hybrid join using Microsoft Entra Kerber
 
 Check the build with `winver` on DC1, CL1 and CL2.
 
+**Keyboard for Fast Lane Remote Labs:** on CL1 and CL2, run [`Set-KeyboardUS.ps1`](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles/Trainer) once in an elevated PowerShell. It sets English (US) for the current user, the welcome screen, system accounts, new users and every user at sign-in, then restarts the client.
+
 ## 2. Service connection point (SCP) on SRV1
 
 Run [`ConfigureSCP.ps1`](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles/Trainer) on SRV1, signed in as Enterprise Admin. The script writes to AD over LDAP, so any domain member works. Use the tenant's `*.onmicrosoft.com` domain (no federation) and the tenant ID from Entra admin center → Overview.
