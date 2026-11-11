@@ -57,7 +57,7 @@ Windows LAPS and Endpoint Privilege Management on the client; Microsoft Graph an
 
 ### Demos
 
-[Overview](Instructions/Demos/overview.md) – all trainer demos, where they run and what they need
+[Overview](Instructions/Demos/README.md) – all trainer demos, where they run and what they need
 
 [Azure Files share and Microsoft Entra Kerberos](Instructions/Demos/azure-files-entra-kerberos.md) – setup checklist for the lab files share
 
