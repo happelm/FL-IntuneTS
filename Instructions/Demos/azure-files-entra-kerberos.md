@@ -1,4 +1,4 @@
-# Trainer notes – Azure Files share and Microsoft Entra Kerberos
+# Demo – Azure Files share and Microsoft Entra Kerberos
 
 The lab files share `\\flane.file.core.windows.net\labfiles` serves CL3/CL4 in Labs 2.1 and 8.1. Participants sign in with their synced `flaneX` accounts and reach the share with a Kerberos ticket from Microsoft Entra ID.
 

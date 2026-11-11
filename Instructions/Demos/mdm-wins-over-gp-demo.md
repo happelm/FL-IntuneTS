@@ -1,4 +1,4 @@
-# Trainer notes – MDM wins over GP demo (CL1)
+# Demo – MDM wins over GP demo (CL1)
 
 The trainer pod shows a Group Policy / Intune conflict on CL1 in `training.flane`: the same SmartScreen setting arrives from GPO-01 and from Intune, and **MDM Wins Over GP** decides. The registry and the event log show the result.
 
