@@ -64,6 +64,8 @@ Windows LAPS and Endpoint Privilege Management on the client; Microsoft Graph an
 
 [Hybrid join and Microsoft Entra Kerberos](Instructions/Trainer/hybrid-join-entra-kerberos.html) – setup checklist for the CL1/CL2 demo in the trainer pod
 
+[MDM wins over GP demo](Instructions/Trainer/mdm-wins-over-gp-demo.html) – GPO-01 / Intune conflict on CL1 in the trainer pod
+
 ### Resources
 
 [Intune-TS link collection](https://github.com/happelm/Intune-Resources/blob/main/Intune3Links.md) – Learn articles, blogs and tools for this workshop.
