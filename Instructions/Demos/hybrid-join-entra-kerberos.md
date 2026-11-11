@@ -116,6 +116,8 @@ Start-ScheduledTask -TaskPath '\Microsoft\Windows\Workplace Join\' -TaskName 'Au
 
 Or run `dsregcmd /join`. The device appears in Entra ID right after the join; the computer OU doesn't need to be in the sync scope. Check with `dsregcmd /status`: `AzureAdJoined : YES` and `DomainJoined : YES`. Sign out and in again, then `AzureAdPrt : YES`.
 
+> **Side note – Microsoft Defender for Endpoint:** For CL1/CL2 to show up as onboarded in the Defender portal, also enable **Device Sync** in the Microsoft Entra Cloud Sync configuration (CL1/CL2 are in `OU=Cloud`, the sync scope) and restart the clients. Without it, they stay in the device inventory as **Can be onboarded**, even though the sensor is running. The device sync works alongside the Kerberos join; the hybrid join itself doesn't need it.
+
 ## 6. Co-management on SCCM – before Windows Hello
 
 CL1 and CL2 run the Configuration Manager client (site FLN). After the hybrid join they're co-managed, and Intune policies apply only to workloads that are switched to Intune. Settings catalog policies follow the **Device Configuration** workload ([Learn](https://learn.microsoft.com/intune/configmgr/comanage/workloads#device-configuration)).
