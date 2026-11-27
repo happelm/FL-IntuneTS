@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title and page.title != site.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+  <style>
+    :root { --fl-red: #A80F29; --fl-red-dark: #8A0C22; --fl-red-tint: #FBEAEC; --fl-teal: #09A9AB;
+      --fl-teal-dark: #00757A; --fl-teal-tint: #E7F6F6; --fl-yellow: #FFC000; --fl-ink: #19242F; }
+    body { margin: 0; }
+    body, .markdown-body { font-family: Arial, Helvetica, sans-serif; color: var(--fl-ink); }
+    .topbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 12px;
+      background: var(--fl-red); color: #fff; padding: 10px 20px; font-weight: 600; border-top: 4px solid var(--fl-teal); }
+    .topbar .stripe { display: inline-flex; gap: 2px; align-self: center; }
+    .topbar .stripe i { display: block; width: 14px; height: 4px; }
+    .topbar .stripe i:nth-child(1) { background: #fff; } .topbar .stripe i:nth-child(2) { background: var(--fl-red-dark); outline: 1px solid rgba(255,255,255,.35); } .topbar .stripe i:nth-child(3) { background: var(--fl-yellow); }
+    .topbar a { color: #fff; text-decoration: none; }
+    .topbar .title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+    .topbar .toplinks { margin-left: auto; display: flex; gap: 18px; font-weight: 400; font-size: 14px; white-space: nowrap; }
+    .topbar .toplinks a:hover { text-decoration: underline; }
+    .topbar .menu-btn { display: none; background: none; border: 1px solid rgba(255,255,255,.6); color: #fff;
+      border-radius: 6px; padding: 2px 10px; font: inherit; cursor: pointer; }
+    .layout { display: flex; }
+    .sidenav { flex: 0 0 290px; position: sticky; top: 48px; align-self: flex-start; height: calc(100vh - 48px);
+      overflow-y: auto; border-right: 1px solid #e1e4e8; padding: 16px 8px 40px 16px; font-size: 14px; }
+    .sidenav h4 { margin: 18px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--fl-teal-dark); }
+    .sidenav ul { list-style: none; margin: 0; padding: 0; }
+    .sidenav li a { display: block; padding: 4px 8px; border-radius: 6px; color: #24292f; text-decoration: none; line-height: 1.35; }
+    .sidenav li a:hover { background: #f3f4f6; }
+    .sidenav li a.active { background: var(--fl-red-tint); color: var(--fl-red); font-weight: 600; box-shadow: inset 3px 0 0 var(--fl-red); }
+    .sidenav .num { color: var(--fl-red); font-weight: 600; margin-right: 4px; }
+    .content { flex: 1; min-width: 0; max-width: 1100px; padding: 24px 48px 60px; }
+    .pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 48px; padding-top: 16px; border-top: 1px solid #e1e4e8; }
+    .pager a { display: block; max-width: 48%; padding: 10px 14px; border: 1px solid #d0d7de; border-radius: 6px; text-decoration: none; }
+    .pager a:hover { border-color: var(--fl-teal); }
+    .markdown-body a { color: var(--fl-teal-dark); }
+    .markdown-body h1 { color: var(--fl-red); border-bottom: 3px solid var(--fl-teal); padding-bottom: .25em; }
+    .markdown-body h2, .markdown-body h3 { color: var(--fl-ink); }
+    .markdown-body h2 { border-bottom-color: #d8dee2; }
+    .markdown-body table th { background: var(--fl-teal-tint); }
+    .pager small { display: block; color: #57606a; }
+    .pager .next { margin-left: auto; text-align: right; }
+    @media (max-width: 600px) { .topbar .toplinks { gap: 10px; font-size: 13px; } .topbar .toplinks .home { display: none; } }
+    @media (max-width: 900px) {
+      .topbar .menu-btn { display: inline-block; }
+      .sidenav { display: none; position: fixed; top: 48px; left: 0; bottom: 0; background: #fff; z-index: 9; width: 290px; height: auto; }
+      body.nav-open .sidenav { display: block; box-shadow: 4px 0 12px rgba(0,0,0,.15); }
+      .content { padding: 20px 16px 48px; }
+    }
+  </style>
+  {% include head-custom.html %}
+</head>
+<body>
+  {% assign labs = site.pages | where_exp: "p", "p.path contains 'Instructions/Exercises/'" | sort: "path" %}
+  {% assign groups = labs | group_by_exp: "p", "p.lab.module" %}
+  {% assign appendix = site.pages | where_exp: "p", "p.path == 'Instructions/Appendix.md'" | first %}
+
+  <header class="topbar">
+    <button class="menu-btn" type="button" onclick="document.body.classList.toggle('nav-open')">Exercises</button>
+    <span class="stripe" aria-hidden="true"><i></i><i></i><i></i></span>
+    <a class="title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+    <nav class="toplinks" aria-label="Course links">
+      <a href="https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles" target="_blank" rel="noopener">Lab files ↗</a>
+      <a href="https://github.com/happelm/FL-IntuneTS" target="_blank" rel="noopener">Repository ↗</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+    <nav class="sidenav" aria-label="Exercises">
+      <ul><li><a href="{{ '/' | relative_url }}"{% if page.url == '/' %} class="active"{% endif %}>Overview</a></li></ul>
+      {% for g in groups %}
+      <h4>{{ g.name | split: ' – ' | first }}</h4>
+      <ul>
+        {% for p in g.items %}
+        {% assign parts = p.title | remove_first: 'Exercise ' | split: ' – ' %}
+        <li><a href="{{ p.url | relative_url }}"{% if p.url == page.url %} class="active"{% endif %}><span class="num">{{ parts[0] }}</span>{{ parts[1] }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endfor %}
+      <h4>Reference</h4>
+      <ul>
+        {% if appendix %}<li><a href="{{ appendix.url | relative_url }}"{% if appendix.url == page.url %} class="active"{% endif %}>Appendix</a></li>{% endif %}
+      </ul>
+    </nav>
+
+    <main class="content markdown-body">
+      {{ content }}
+
+      {% for p in labs %}
+        {% if p.url == page.url %}
+          {% assign i = forloop.index0 %}
+          {% assign prev_i = i | minus: 1 %}
+          {% assign next_i = i | plus: 1 %}
+          <div class="pager">
+            {% if prev_i >= 0 %}{% assign prev = labs[prev_i] %}
+            <a class="prev" href="{{ prev.url | relative_url }}"><small>← Previous</small>{{ prev.title }}</a>
+            {% endif %}
+            {% if next_i < labs.size %}{% assign next = labs[next_i] %}
+            <a class="next" href="{{ next.url | relative_url }}"><small>Next →</small>{{ next.title }}</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </main>
+  </div>
+  <script>
+    document.querySelectorAll('.sidenav a').forEach(function (a) {
+      a.addEventListener('click', function () { document.body.classList.remove('nav-open'); });
+    });
+    var act = document.querySelector('.sidenav a.active');
+    var nav = document.querySelector('.sidenav');
+    if (act && nav) nav.scrollTop = act.offsetTop - nav.clientHeight / 2;
+  </script>
+</body>
+</html>
