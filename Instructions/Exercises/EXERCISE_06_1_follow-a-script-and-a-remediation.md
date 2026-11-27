@@ -11,11 +11,11 @@ lab:
 
 **Estimated time:** 40 minutes
 
-**Goal:** Follow a platform script and a remediation from the assignment to the result on CL3 – the platform script after an IME restart, the remediation on demand – and read the result in the portal.
+**Goal:** Trace a platform script and a remediation from assignment to result on CL3 – the platform script after an IME restart, the remediation on demand – and read the outcome in the portal.
 
 ### Part A – Platform script after an IME restart
 
-1. Intune admin center → Devices → Scripts and remediations → Platform scripts → Add → Windows 10 and later: platform script `flaneX-Folder` with `createtestfolder.ps1` from the [Labfiles](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles), assigned to `studentXdevices`:
+1. In the Intune admin center, go to Devices → Scripts and remediations → Platform scripts → Add → Windows 10 and later and add the platform script `flaneX-Folder` with `createtestfolder.ps1` from the [Labfiles](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles), assigned to `studentXdevices`:
 
    | Setting | Value |
    |---|---|
@@ -23,8 +23,8 @@ lab:
    | Enforce script signature check | No |
    | Run script in 64-bit PowerShell host | No |
 
-2. In `Detect-LabKey.ps1` and `Remediate-LabKey.ps1` from the Labfiles, replace `flaneX` in the registry key with your user name (for example `flane3`). Read both: which exit code means compliant, which one starts the remediation?
-3. Intune admin center → Devices → Scripts and remediations → Remediations → **Create script package**: `flaneX-Reg` with both scripts, assigned to `studentXdevices`, schedule **Hourly**:
+2. In `Detect-LabKey.ps1` and `Remediate-LabKey.ps1` from the Labfiles, change `flaneX` in the registry key to your user name (for example `flane3`). Read through both: which exit code stands for compliant, and which one triggers the remediation?
+3. Under Devices → Scripts and remediations → Remediations, select **Create script package** and create `flaneX-Reg` with both scripts, assigned to `studentXdevices` on the schedule **Hourly**:
 
    | Setting | Value |
    |---|---|
@@ -32,34 +32,34 @@ lab:
    | Enforce script signature check | No |
    | Run script in 64-bit PowerShell | Yes |
 
-4. CL3, elevated PowerShell: restart the IME.
+4. On CL3, restart the IME from an elevated PowerShell.
 
    ```powershell
    Restart-Service -Name IntuneManagementExtension
    ```
 
-5. Follow `flaneX-Folder` in `IntuneManagementExtension.log` and `AgentExecutor.log`.
-6. CL3: check `HKLM\SOFTWARE\flaneX\Lab`. The key is still missing – the IME restart ran the platform script, not the remediation. `flaneX-Reg` waits for its schedule.
+5. Trace `flaneX-Folder` in `IntuneManagementExtension.log` and `AgentExecutor.log`.
+6. Still on CL3, look for `HKLM\SOFTWARE\flaneX\Lab`. It isn't there yet: the IME restart ran the platform script, not the remediation, and `flaneX-Reg` is waiting for its schedule.
 
 ### Part B – Remediation on demand
 
-7. Do not wait for the schedule: Intune admin center → Devices → All devices → `CL3-yourname` → … → **Run remediation** → `flaneX-Reg`.
-8. CL3: follow the run in `HealthScripts.log` in `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs`: detection, remediation, detection again. Check that `HKLM\SOFTWARE\flaneX\Lab` exists now.
-9. Intune admin center → Remediations → `flaneX-Reg` → Device status: add the columns for the detection output before and after the remediation.
-10. Intune admin center: compare the device status of both scripts for CL3.
+7. Skip the wait: in the Intune admin center, open Devices → All devices → `CL3-yourname` → … → **Run remediation** and pick `flaneX-Reg`.
+8. On CL3, trace the run in `HealthScripts.log` under `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs` – detection, remediation, detection again – and confirm that `HKLM\SOFTWARE\flaneX\Lab` now exists.
+9. In the Intune admin center under Remediations → `flaneX-Reg` → Device status, add the columns for the detection output before and after the remediation.
+10. Finally, compare the device status of both scripts for CL3 in the Intune admin center.
 
 ### Checkpoint
 
-- [ ] `C:\TestFolder` exists on CL3
-- [ ] Exit code of `flaneX-Folder` found in `AgentExecutor.log`
-- [ ] After the IME restart: `HKLM\SOFTWARE\flaneX\Lab` still missing
-- [ ] Run on demand: issue found, then fixed – `HKLM\SOFTWARE\flaneX\Lab` exists on CL3 without waiting for the schedule
-- [ ] Device status shows **Issue fixed** with the output of both detection runs
+- [ ] CL3 has `C:\TestFolder`
+- [ ] `AgentExecutor.log` shows the exit code of `flaneX-Folder`
+- [ ] After the IME restart, `HKLM\SOFTWARE\flaneX\Lab` is still missing
+- [ ] The on-demand run found the issue and fixed it – `HKLM\SOFTWARE\flaneX\Lab` exists on CL3 without waiting for the schedule
+- [ ] Device status reads **Issue fixed** and shows the output of both detection runs
 
-**Note:** Detection exits with `1` when the key is missing – only exit code `1` starts the remediation. A platform script that fails is retried three times at the next three IME check-ins, then it stays failed until the script or the policy changes.
+### Good to know
 
-**Note:** Restarting the IME runs pending platform scripts, but not remediations – they run on their schedule or on demand. If the hourly schedule was faster than you and the key already exists in step 6, follow that run in `HealthScripts.log` instead and still start the on-demand run in step 7.
+- **Exit codes and retries:** detection exits with `1` when the key is missing, and only exit code `1` triggers the remediation. A failing platform script is retried three times at the next three IME check-ins; after that it stays failed until the script or the policy changes.
+- **What an IME restart runs:** pending platform scripts, but not remediations – those follow their schedule or run on demand. If the hourly schedule beat you to it and the key already exists in step 6, trace that run in `HealthScripts.log` instead and still start the on-demand run in step 7.
+- **Detection output:** whatever a detection script writes with `Write-Output` lands in the device status columns. Keep it short and readable – the helpdesk sees it first.
 
-**Note:** Everything a detection script writes with `Write-Output` shows up in the device status columns. Write a short, readable state – it is what the helpdesk sees first.
-
-**Why 64-bit:** A 32-bit PowerShell host writes `HKLM\SOFTWARE` to `HKLM\SOFTWARE\WOW6432Node`. The remediation would then fix a different key than the one you check.
+**Why 64-bit:** a 32-bit PowerShell host redirects `HKLM\SOFTWARE` to `HKLM\SOFTWARE\WOW6432Node`, so the remediation would fix a different key from the one you check.

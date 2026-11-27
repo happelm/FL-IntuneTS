@@ -11,10 +11,10 @@ lab:
 
 **Estimated time:** 45 minutes
 
-**Goal:** Follow one Win32 app from the assignment to **Installed** – in the log, the registry and the portal.
+**Goal:** Trace a single Win32 app from its assignment all the way to **Installed** – in the log, in the registry and in the portal.
 
-1. Download `cmtrace.intunewin` from the [Labfiles](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles). The package already contains `cmtrace.exe`, `CmtraceInstall.ps1` and `CmtraceRemove.ps1`.
-2. Intune admin center → Apps → Windows: add a **Windows app (Win32)** `flaneX-CMTrace` from `cmtrace.intunewin` with these settings and assign it as **Required** to `studentXdevices`:
+1. Download `cmtrace.intunewin` from the [Labfiles](https://github.com/happelm/FL-IntuneTS/tree/main/Labfiles). `cmtrace.exe`, `CmtraceInstall.ps1` and `CmtraceRemove.ps1` are already inside the package.
+2. In the Intune admin center under Apps → Windows, add the **Windows app (Win32)** `flaneX-CMTrace` from `cmtrace.intunewin` with the settings below and assign it as **Required** to `studentXdevices`:
 
    | Setting | Value |
    |---|---|
@@ -23,29 +23,31 @@ lab:
    | Install behavior | System |
    | Detection rule | File: `C:\Windows`, file or folder `CMTrace.exe`, file or folder exists |
 
-3. Note the app ID of `flaneX-CMTrace`: open the app in the Intune admin center – the ID is the GUID at the end of the browser URL.
-4. CL3: open `AppWorkload.log` in CMTrace and highlight the app ID (CMTrace: Tools → Highlight; `Ctrl+F` jumps from hit to hit). Follow the highlighted lines from top to bottom and find the stages from the lifecycle slides in this order:
-   1. the app policy with your app ID arrives
-   2. detection before the install: the app is not detected
-   3. content download, hash check, decryption and unzip into `C:\Windows\IMECache`
+3. Write down the app ID of `flaneX-CMTrace`. Open the app in the Intune admin center – the ID is the GUID at the end of the browser URL.
+4. On CL3, open `AppWorkload.log` in CMTrace and highlight the app ID (Tools → Highlight; `Ctrl+F` jumps between hits). Read the highlighted lines from top to bottom and find the lifecycle stages from the slides, in this order:
+   1. the app policy carrying your app ID arrives
+   2. detection before the install doesn't find the app
+   3. the content is downloaded, hash-checked, decrypted and unzipped into `C:\Windows\IMECache`
    4. the install command from step 2 runs and returns its exit code
-   5. detection after the install: the app is detected
-   6. the result is reported to Intune
-5. **Optional:** if nothing about your app shows up in `AppWorkload.log` after 3–5 minutes, restart the IME in an elevated PowerShell:
+   5. detection after the install finds the app
+   6. the result goes back to Intune
+5. **Optional:** if `AppWorkload.log` still shows nothing about your app after 3–5 minutes, restart the IME from an elevated PowerShell:
 
    ```powershell
    Restart-Service -Name IntuneManagementExtension
    ```
 
-6. CL3: `regedit` → `HKLM\SOFTWARE\Microsoft\IntuneManagementExtension\Win32Apps` – find the key with your app ID and its state.
-7. Intune admin center: compare the install status of `flaneX-CMTrace` on CL3 with what the log says.
+6. On CL3, open `regedit`, go to `HKLM\SOFTWARE\Microsoft\IntuneManagementExtension\Win32Apps` and find the key with your app ID and its state.
+7. In the Intune admin center, hold the install status of `flaneX-CMTrace` on CL3 against what the log tells you.
 
 ### Checkpoint
 
-- [ ] Download, install and detection of `flaneX-CMTrace` found in `AppWorkload.log`
-- [ ] App key and state message found in the registry
-- [ ] Portal shows **Installed** for CL3
+- [ ] `AppWorkload.log` shows download, install and detection of `flaneX-CMTrace`
+- [ ] You found the app key and its state message in the registry
+- [ ] The portal reports **Installed** for CL3
 
-**Note:** Under `Win32Apps`, apps assigned to the device sit under the all-zeros GUID, apps assigned to a user under that user's Entra object ID.
+### Good to know
 
-**Why:** The detection rule decides **Installed** – not the exit code alone. When the portal and the log disagree, the log is right.
+- **Where the keys sit:** under `Win32Apps`, apps assigned to the device are stored below the all-zeros GUID, apps assigned to a user below that user's Entra object ID.
+
+**Background:** **Installed** is decided by the detection rule, not by the exit code alone. If portal and log disagree, trust the log.

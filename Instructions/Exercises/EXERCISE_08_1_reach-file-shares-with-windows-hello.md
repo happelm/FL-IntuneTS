@@ -11,31 +11,34 @@ lab:
 
 **Estimated time:** 10 minutes
 
-**Goal:** Sign in with Windows Hello and open an Azure file share without a password prompt.
+**Goal:** Sign in with Windows Hello and reach an Azure file share with no password prompt.
 
-1. CL4: sign out and sign in again with the Windows Hello PIN you set up in Exercise 0.1.
-2. CL4: check the SSO state.
+1. On CL4, sign out and sign back in with the Windows Hello PIN from Exercise 0.1.
+2. Still on CL4, check the SSO state.
 
    ```cmd
    dsregcmd /status
    ```
 
-3. CL4: open the Azure file share `\\flane.file.core.windows.net\labfiles` (the share you used in Exercise 2.1). It works only from CL3 and CL4.
-4. CL4: list your Kerberos tickets.
+3. Open the Azure file share `\\flane.file.core.windows.net\labfiles` on CL4 (the share from Exercise 2.1). It is reachable only from CL3 and CL4.
+4. Then list your Kerberos tickets on CL4.
 
    ```cmd
    klist
    ```
 
-5. Trainer demo: access to on-premises resources in `training.flane` (`\\dc1.training.flane\labfiles`) with the same sign-in.
+5. The trainer demonstrates access to on-premises resources in `training.flane` (`\\dc1.training.flane\labfiles`) with the same sign-in.
 
 <!-- VERIFY: OnPremTgt = YES in the Fastlane pod without line of sight to DC1 -->
 
 ### Checkpoint
 
-- [ ] `dsregcmd /status`, section SSO State: `AzureAdPrt`, `CloudTgt` and `OnPremTgt` are `YES`
-- [ ] Azure file share opens without a password prompt, `klist` shows a ticket for the storage account (`cifs/flane.file.core.windows.net`)
+- [ ] In the SSO State section of `dsregcmd /status`, `AzureAdPrt`, `CloudTgt` and `OnPremTgt` all read `YES`
+- [ ] The Azure file share opens with no password prompt, and `klist` lists a ticket for the storage account (`cifs/flane.file.core.windows.net`)
 
-**Note:** Microsoft Entra Kerberos and Windows Hello for Business are already enabled in the training tenant. `CloudTgt` is the cloud Kerberos ticket for cloud resources such as Azure Files, `OnPremTgt` the one for on-premises resources. Your clients have no line of sight to the domain controller in `training.flane`, so on-premises access is shown by the trainer.
+### Good to know
 
-**Why:** No PRT, no SSO. Always start with `dsregcmd /status` before you look at the network or the file server.
+- **Already set up:** Microsoft Entra Kerberos and Windows Hello for Business are enabled in the training tenant.
+- **Two tickets:** `CloudTgt` is the cloud Kerberos ticket for cloud resources such as Azure Files; `OnPremTgt` is the one for on-premises resources. Your clients can't see the domain controller in `training.flane`, so the trainer shows on-premises access.
+
+**Background:** No PRT, no SSO. Begin with `dsregcmd /status` every time, before you look at the network or the file server.

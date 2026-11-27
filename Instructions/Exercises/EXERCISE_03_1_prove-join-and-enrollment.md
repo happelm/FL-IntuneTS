@@ -11,20 +11,22 @@ lab:
 
 **Estimated time:** 25 minutes
 
-**Goal:** Prove from the device side that CL3 is joined and enrolled – and know where each fact is stored.
+**Goal:** Show from the device itself that CL3 is joined and enrolled – and learn where each of those facts lives.
 
-1. CL3: run `dsregcmd /status` and check `AzureAdJoined` and `AzureAdPrt`.
-2. CL3: Settings → Accounts → Access work or school → your account → **Info**. Note the management server and the last sync.
-3. CL3, elevated: Task Scheduler → Microsoft → Windows → EnterpriseMgmt. You find two GUID folders – one for the MDM enrollment, one for MMP-C. Note both GUIDs.
-4. CL3, elevated: open `regedit` and go to `HKLM\SOFTWARE\Microsoft\Enrollments` – find the keys with the two GUIDs from step 3.
+1. On CL3, run `dsregcmd /status` and look at `AzureAdJoined` and `AzureAdPrt`.
+2. Still on CL3, open Settings → Accounts → Access work or school → your account → **Info** and write down the management server and the last sync.
+3. In an elevated session on CL3, open Task Scheduler → Microsoft → Windows → EnterpriseMgmt. There are two GUID folders, one for the MDM enrollment and one for MMP-C. Write down both GUIDs.
+4. Then open `regedit` (elevated), go to `HKLM\SOFTWARE\Microsoft\Enrollments` and locate the keys that match the two GUIDs from step 3.
 
 ### Checkpoint
 
 - [ ] `AzureAdJoined : YES` and `AzureAdPrt : YES`
-- [ ] Two GUIDs in Task Scheduler, the same two GUIDs under `HKLM\SOFTWARE\Microsoft\Enrollments`
+- [ ] The two GUIDs from Task Scheduler reappear under `HKLM\SOFTWARE\Microsoft\Enrollments`
 
-**Note:** Task Scheduler shows the EnterpriseMgmt tasks only to administrators. The GUIDs are different on every client – Task Scheduler is the place to find them. `HKLM\SOFTWARE\Microsoft\Enrollments` holds more keys than these two.
+### Good to know
 
-**Why:** The enrollment GUID is the key for everything that follows: Intune policies are stored per provider GUID – in Exercise 4.1 you find one of your two GUIDs under `PolicyManager`.
+- **Admins only:** Task Scheduler shows the EnterpriseMgmt tasks to administrators only. The GUIDs differ on every client, which is why Task Scheduler is where you look them up. `HKLM\SOFTWARE\Microsoft\Enrollments` contains more keys than these two.
 
-**Reference:** [Diagnose MDM enrollment](https://learn.microsoft.com/en-us/windows/client-management/mdm-diagnose-enrollment) on Microsoft Learn – the Group Policy part does not apply to your Entra-joined clients.
+**Background:** Everything that follows hinges on the enrollment GUID, because Intune policies are stored per provider GUID. In Exercise 4.1, one of your two GUIDs turns up under `PolicyManager`.
+
+**Reference:** [Diagnose MDM enrollment](https://learn.microsoft.com/en-us/windows/client-management/mdm-diagnose-enrollment) on Microsoft Learn – skip the Group Policy part, it doesn't apply to your Entra-joined clients.
