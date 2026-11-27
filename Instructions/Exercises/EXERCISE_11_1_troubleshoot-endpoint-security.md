@@ -13,13 +13,13 @@ lab:
 
 > **Draft:** This lab is new and has not been run in this environment yet. If a step behaves differently, tell the trainer.
 
-**Goal:** Follow three endpoint security policies from the portal to the client – and find out why one of them can't work on CL3.
+**Goal:** Trace three endpoint security policies from the portal to the client – and work out why one of them can't work on CL3.
 
-**Starting point:** CL3 is onboarded to Microsoft Defender for Endpoint automatically through `studentXdevices`. Every participant works in the same tenant: assign your policies to `studentXdevices` only.
+**Starting point:** CL3 is onboarded to Microsoft Defender for Endpoint automatically through `studentXdevices`. All participants share the same tenant, so assign your policies to `studentXdevices` only.
 
 ### Part A – Policies
 
-1. Intune admin center → Endpoint security, platform **Windows**, assigned to `studentXdevices`:
+1. In the Intune admin center under Endpoint security, create these policies for platform **Windows** and assign each to `studentXdevices`:
 
    | Policy | Type | Settings |
    |---|---|---|
@@ -31,25 +31,25 @@ lab:
 
 ### Part B – Defender for Endpoint and antivirus
 
-3. CL3, PowerShell: is the sensor onboarded and running?
+3. On CL3, check in PowerShell whether the sensor is onboarded and running.
 
    ```powershell
    Get-Service -Name Sense
    Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows Advanced Threat Protection\Status' -Name OnboardingState
    ```
 
-4. Antivirus state and your exclusion:
+4. Next, check the antivirus state and your exclusion:
 
    ```powershell
    Get-MpComputerStatus | Select-Object AMRunningMode, RealTimeProtectionEnabled, AntivirusSignatureLastUpdated
    Get-MpPreference | Select-Object -ExpandProperty ExclusionPath
    ```
 
-5. Intune admin center → Endpoint security → Antivirus → `flaneX-AV` → device status. Then Devices → `CL3-yourname` → Device configuration: is any policy in **Conflict**? Open it and note which setting collides with which policy.
+5. In the Intune admin center, open Endpoint security → Antivirus → `flaneX-AV` → device status. Then go to Devices → `CL3-yourname` → Device configuration: does any policy show **Conflict**? Open it and note which setting collides with which policy.
 
 ### Part C – ASR rule in audit mode
 
-6. CL3, PowerShell: list the ASR rules and their mode (`2` = Audit, `1` = Block).
+6. On CL3, list the ASR rules with their mode in PowerShell (`2` = Audit, `1` = Block).
 
    ```powershell
    $p = Get-MpPreference
@@ -58,28 +58,28 @@ lab:
    }
    ```
 
-7. Trigger the rule – start a process through WMI:
+7. Now trigger the rule by starting a process through WMI:
 
    ```powershell
    Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = 'notepad.exe' }
    ```
 
-8. Event Viewer → Applications and Services Logs → Microsoft → Windows → Windows Defender → Operational: filter on event ID **1122**. Notepad started anyway – why?
+8. In Event Viewer, go to Applications and Services Logs → Microsoft → Windows → Windows Defender → Operational and filter on event ID **1122**. Notepad started regardless – why?
 
 ### Part D – BitLocker
 
-9. CL3, elevated PowerShell:
+9. On CL3, run in an elevated PowerShell:
 
    ```powershell
    manage-bde -status C:
    Get-Tpm
    ```
 
-10. Find out why BitLocker did or did not start. Follow the chain in this order:
+10. Work out why BitLocker did or didn't start by following the chain in this order:
     - Event Viewer → Microsoft → Windows → DeviceManagement-Enterprise-Diagnostics-Provider → Admin: errors for `./Device/Vendor/MSFT/BitLocker/…`
     - Event Viewer → Microsoft → Windows → BitLocker-API → Management: events 853, 854, 851
     - Task Scheduler → Microsoft → Windows → BitLocker → **BitLocker MDM policy Refresh**: last run result
-11. Intune admin center → Devices → `CL3-yourname` → **Device query**: check the same from the portal.
+11. In the Intune admin center, open Devices → `CL3-yourname` → **Device query** and check the same from the portal side.
 
     ```text
     TPM
@@ -95,15 +95,18 @@ lab:
 
 ### Checkpoint
 
-- [ ] `Sense` service running, `OnboardingState` = `1`
-- [ ] `C:\Source` in `ExclusionPath` – or a conflict named that explains why not
-- [ ] ASR rule in mode `2`, event 1122 for your WMI process start
-- [ ] BitLocker: state of `C:` and the reason, with the event ID as evidence
-- [ ] Same answer from Device query as from the client
+- [ ] The `Sense` service is running and `OnboardingState` = `1`
+- [ ] `ExclusionPath` contains `C:\Source` – or you can name the conflict that explains why not
+- [ ] The ASR rule is in mode `2`, and event 1122 records your WMI process start
+- [ ] For BitLocker, you know the state of `C:` and the reason, with the event ID as evidence
+- [ ] Device query gives the same answer as the client
 
-**Note:** Audit mode logs what the rule would block – that is why Notepad starts. A missing or unready TPM stops silent encryption with event 853 in BitLocker-API → Management. Startup PIN or startup key set to *Required* also breaks silent encryption.
+### Good to know
 
-**Why:** Endpoint security policies, security baselines and configuration profiles can set the same setting. The portal shows a conflict, the client shows what won. Start with the client, then go back to the portal.
+- **Audit mode:** it logs what the rule would block, which is why Notepad still starts.
+- **Silent encryption blockers:** a missing or unready TPM stops silent encryption with event 853 in BitLocker-API → Management. A startup PIN or startup key set to *Required* breaks silent encryption as well.
+
+**Background:** Endpoint security policies, security baselines and configuration profiles can all set the same setting. The portal reports a conflict, the client shows which value won. Start on the client, then return to the portal.
 
 <!-- VERIFY: WMI Win32_Process Create triggers 1122 for rule d1e49aac-8f56-4280-b9ba-993a6d77406c -->
 <!-- VERIFY: Lab-Administrator for Students creates AV/BitLocker policies (SecurityBaselines permission) -->

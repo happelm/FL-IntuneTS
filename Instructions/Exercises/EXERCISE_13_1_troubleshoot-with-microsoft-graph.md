@@ -11,29 +11,29 @@ lab:
 
 **Estimated time:** 30 minutes
 
-**Goal:** Answer the first questions of a support case for CL3 in Graph Explorer – which device, which objects, which groups, which policies, what changed – and sync the device.
+**Goal:** Use Graph Explorer to answer the opening questions of a support case for CL3 – which device, which objects, which groups, which policies, what changed – and then sync the device.
 
-**Why:** The Intune admin center spreads these answers over many pages, and some it does not show at all: the Entra object behind a device, nested group memberships, every change of the day in one list. Graph returns them in one call each – and a call you built once becomes a script.
+**Background:** The Intune admin center spreads these answers across many pages, and some of them it doesn't show at all: the Entra object behind a device, nested group memberships, every change of the day in a single list. Graph returns each of them with one call – and a call you built once turns into a script.
 
-Open Graph Explorer (`https://aka.ms/ge`) and sign in with your user `flaneX`. The method (GET, POST, …) is a drop-down left of the URL box: set it there, clear the URL box and paste only the URL from the code blocks below. Replace the values in `{braces}`.
+Open Graph Explorer (`https://aka.ms/ge`) and sign in as `flaneX`. The method (GET, POST, …) is the drop-down to the left of the URL box: set it there, empty the URL box and paste just the URL from the code blocks below. Replace the values in `{braces}`.
 
 ### Part A – Which device, which objects
 
-1. Method **GET** – find CL3 in Intune. Note `id` (Intune device ID) and `azureADDeviceId`:
+1. With method **GET**, find CL3 in Intune and write down `id` (Intune device ID) and `azureADDeviceId`:
 
    ```text
    https://graph.microsoft.com/v1.0/deviceManagement/managedDevices?$filter=deviceName eq 'CL3-yourname'&$select=id,deviceName,userPrincipalName,azureADDeviceId,deviceEnrollmentType,managementAgent,complianceState,enrolledDateTime,lastSyncDateTime
    ```
 
-   `managementAgent` tells you who manages the device: `mdm` is Intune only, `configurationManagerClientMdm` is co-managed.
+   `managementAgent` shows who manages the device: `mdm` means Intune only, `configurationManagerClientMdm` means co-managed.
 
-2. Method **GET** – find the Entra ID object with the `azureADDeviceId`. Note its `id` – the Entra object ID is a different ID than the Intune device ID and the device ID:
+2. With method **GET**, look up the Entra ID object by its `azureADDeviceId` and write down its `id`. The Entra object ID differs from both the Intune device ID and the device ID:
 
    ```text
    https://graph.microsoft.com/v1.0/devices?$filter=deviceId eq '{azureADDeviceId}'&$select=id,deviceId,displayName,trustType,accountEnabled,registrationDateTime,approximateLastSignInDateTime
    ```
 
-3. Method **GET** – are there more Entra objects with the same name? Every object beyond the first is a leftover from an earlier enrollment or join:
+3. With method **GET**, check for further Entra objects with the same name. Every object after the first is left over from an earlier enrollment or join:
 
    ```text
    https://graph.microsoft.com/v1.0/devices?$filter=displayName eq 'CL3-yourname'&$select=id,deviceId,trustType,accountEnabled,registrationDateTime
@@ -41,39 +41,39 @@ Open Graph Explorer (`https://aka.ms/ge`) and sign in with your user `flaneX`. T
 
 ### Part B – Why is something applied, or not
 
-4. Method **GET** – all groups CL3 is a member of, including nested groups. Use the Entra object ID from step 2:
+4. With method **GET**, list every group CL3 belongs to, nested groups included. Use the Entra object ID from step 2:
 
    ```text
    https://graph.microsoft.com/v1.0/devices/{Entra object id}/transitiveMemberOf?$select=displayName
    ```
 
-   Is `studentXdevices` in the list? A policy or app assigned to a group that is missing here never reaches the device.
+   Does the list contain `studentXdevices`? A policy or app assigned to a group missing from this list never reaches the device.
 
-5. Method **GET** – compliance state per compliance policy:
+5. With method **GET**, get the compliance state for each compliance policy:
 
    ```text
    https://graph.microsoft.com/v1.0/deviceManagement/managedDevices/{id}/deviceCompliancePolicyStates
    ```
 
-6. Method **GET** – state per configuration profile:
+6. With method **GET**, get the state for each configuration profile:
 
    ```text
    https://graph.microsoft.com/v1.0/deviceManagement/managedDevices/{id}/deviceConfigurationStates
    ```
 
-   Compare with the Intune admin center → Devices → `CL3-yourname` → Device configuration. Which profiles are missing in the Graph result, and which ones show up twice?
+   Put it next to Intune admin center → Devices → `CL3-yourname` → Device configuration. Which profiles are missing from the Graph result, and which appear twice?
 
 ### Part C – What changed, and act
 
-7. Method **GET** – every change to apps since yesterday morning: who, when, which object. Replace the date with yesterday's date:
+7. With method **GET**, list every app change since yesterday morning – who, when, which object. Replace the date with yesterday's:
 
    ```text
    https://graph.microsoft.com/v1.0/deviceManagement/auditEvents?$filter=activityDateTime ge 2026-10-16T00:00:00Z and componentName eq 'MobileApp'&$select=activityDateTime,activityType,actor,resources&$top=20
    ```
 
-   Run it again with `componentName eq 'DeviceConfiguration'` and `componentName eq 'ManagedDevices'`. Find your own changes from Exercise 5.1 and 6.1 on Day 2.
+   Repeat it with `componentName eq 'DeviceConfiguration'` and `componentName eq 'ManagedDevices'`, and find your own changes from Exercise 5.1 and 6.1 on Day 2.
 
-8. Method **POST**, request body empty – sync CL3, then run step 1 again a few minutes later and compare `lastSyncDateTime`:
+8. With method **POST** and an empty request body, sync CL3. A few minutes later, run step 1 again and compare `lastSyncDateTime`:
 
    ```text
    https://graph.microsoft.com/v1.0/deviceManagement/managedDevices/{id}/syncDevice
@@ -81,14 +81,15 @@ Open Graph Explorer (`https://aka.ms/ge`) and sign in with your user `flaneX`. T
 
 ### Checkpoint
 
-- [ ] Intune device ID, device ID and Entra object ID of CL3 noted – three different IDs
-- [ ] Number of Entra objects named `CL3-yourname` checked
-- [ ] `studentXdevices` found in the group list of CL3
-- [ ] Your own changes from Day 2 found in the audit events
-- [ ] Sync triggered through Graph, `lastSyncDateTime` updated
+- [ ] You noted the Intune device ID, device ID and Entra object ID of CL3 – three different IDs
+- [ ] You checked how many Entra objects are named `CL3-yourname`
+- [ ] The group list of CL3 contains `studentXdevices`
+- [ ] The audit events show your own changes from Day 2
+- [ ] The sync through Graph updated `lastSyncDateTime`
 
-**Note:** In Graph Explorer, **Code snippets** next to the response shows the PowerShell command for the same request – the step from a query to a script.
+### Good to know
 
-**Note:** Graph Explorer asks for permissions when you sign in; in this tenant the trainer has granted them in advance. Your Intune role still decides what you see: the audit events need the permission to read audit data, and you only see the devices your role covers.
+- **From query to script:** **Code snippets** next to the response shows the PowerShell command for the same request.
+- **Permissions:** Graph Explorer asks for permissions at sign-in; in this tenant the trainer granted them beforehand. Your Intune role still limits what you see – the audit events need permission to read audit data, and you only see the devices your role covers.
 
-**Why three IDs:** Intune, Entra ID and the device each have their own: `id` in Intune, `deviceId` (written to the device at join or registration, shown by `dsregcmd /status`) and `id` in Entra ID. Support tools, logs and portals use different ones – mixing them up is a classic dead end.
+**Why three IDs:** Intune, Entra ID and the device each keep their own – `id` in Intune, `deviceId` (written to the device at join or registration, shown by `dsregcmd /status`) and `id` in Entra ID. Support tools, logs and portals use different ones, and mixing them up is a classic dead end.

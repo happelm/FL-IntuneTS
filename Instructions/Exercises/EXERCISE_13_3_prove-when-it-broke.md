@@ -13,39 +13,39 @@ lab:
 
 > **Draft:** This lab is new and has not been run in this environment yet. If a step behaves differently, tell the trainer.
 
-**Goal:** Answer the three questions of every compliance ticket – what is the state now, since when, and who changed what – with a Graph export, the audit log and the Intune Data Warehouse in Excel.
+**Goal:** Answer the three questions behind every compliance ticket – what is the state now, since when, and who changed what – using a Graph export, the audit log and the Intune Data Warehouse in Excel.
 
-**Starting point:** In Exercise 7.1 you made CL3 noncompliant with `flaneX-MinOS` and repaired it. That is your incident. The scripts are in `C:\Toolbox` from Exercise 13.2, the Excel queries in `C:\Toolbox\DataWarehouse`.
+**Starting point:** Exercise 7.1 made CL3 noncompliant with `flaneX-MinOS` and repaired it – that is your incident. The scripts sit in `C:\Toolbox` from Exercise 13.2, the Excel queries in `C:\Toolbox\DataWarehouse`.
 
 ### Part A – Now: snapshot with Graph
 
-1. CL3, Windows PowerShell:
+1. On CL3, run in Windows PowerShell:
 
    ```powershell
    cd C:\Toolbox
    PowerShell.exe -ExecutionPolicy Bypass -File .\Export-IntuneReport.ps1 -Preset DeviceCompliance
    ```
 
-   Open the CSV in Excel and filter on `CL3-yourname` and `CL4-yourname`: `ComplianceState`, `InGracePeriodUntil`, `LastContact`.
+   Open the CSV in Excel, filter on `CL3-yourname` and `CL4-yourname` and read `ComplianceState`, `InGracePeriodUntil` and `LastContact`.
 
 ### Part B – Since when: trend
 
-2. Daily counts per compliance state for the whole tenant:
+2. Export the daily counts per compliance state for the whole tenant:
 
    ```powershell
    PowerShell.exe -ExecutionPolicy Bypass -File .\Export-IntuneReport.ps1 -Preset DeviceComplianceTrend
    ```
 
-   Filter on `ComplianceState` = noncompliant. Do you see the day of Exercise 7.1?
-3. Intune admin center → Reports → Intune Data warehouse → **Data warehouse**: copy the OData feed URL, without `?api-version=...`.
-4. Excel → Data → Get Data → From Other Sources → **Blank Query** → Advanced Editor: paste `DataWarehouse\ComplianceTrend.pq`, replace the value of `FeedUrl` with your URL, **Done**. Sign in with **Organizational account** as `flaneX`, then **Close & Load**.
-5. Insert a line chart from the table. Compare the curve with the CSV from step 2.
-6. Same way with `DataWarehouse\Devices.pq`: compare `lastSyncDateTime` of CL3 and CL4 with Devices → `CL3-yourname` → **Last check-in** in the portal.
+   Filter on `ComplianceState` = noncompliant. Can you spot the day of Exercise 7.1?
+3. In the Intune admin center, go to Reports → Intune Data warehouse → **Data warehouse** and copy the OData feed URL, leaving out `?api-version=...`.
+4. In Excel, choose Data → Get Data → From Other Sources → **Blank Query** and open the Advanced Editor. Paste `DataWarehouse\ComplianceTrend.pq`, replace the value of `FeedUrl` with your URL and select **Done**. Sign in with **Organizational account** as `flaneX`, then select **Close & Load**.
+5. Insert a line chart from the table and compare the curve with the CSV from step 2.
+6. Repeat with `DataWarehouse\Devices.pq` and compare `lastSyncDateTime` of CL3 and CL4 with Devices → `CL3-yourname` → **Last check-in** in the portal.
 
 ### Part C – Who changed what
 
-7. Intune admin center → Tenant administration → **Audit logs**: filter on the last 7 days and find the changes to `flaneX-MinOS` from Exercise 7.1. Who changed what, and when?
-8. Fill in the table: which source answers which question?
+7. In the Intune admin center under Tenant administration → **Audit logs**, filter on the last 7 days and find the changes to `flaneX-MinOS` from Exercise 7.1. Who changed what, and when?
+8. Complete the table: which source answers which question?
 
    | Question | Graph export | Data Warehouse | Audit log |
    |---|---|---|---|
@@ -56,14 +56,18 @@ lab:
 
 ### Checkpoint
 
-- [ ] Compliance snapshot as CSV, CL3 and CL4 found
-- [ ] Compliance trend as CSV and as line chart in Excel
-- [ ] Change to `flaneX-MinOS` found in the audit log with time and account
-- [ ] Table filled in
+- [ ] The compliance snapshot is saved as CSV and contains CL3 and CL4
+- [ ] The compliance trend exists as CSV and as a line chart in Excel
+- [ ] The audit log shows the change to `flaneX-MinOS` with time and account
+- [ ] The table is complete
 
-**Note:** The Data Warehouse is refreshed once a day – a device that was noncompliant for an hour between two snapshots may not show up in the trend. The compliance trend is tenant-wide: in the shared training tenant you see the devices of all participants. Microsoft Graph can't be a Power Query data source, which is why Excel uses the Data Warehouse OData feed.
+### Good to know
 
-**Why:** "It worked yesterday" is a claim. The trend shows since when, the audit log shows the change that fits the time – that is the evidence for the ticket.
+- **Daily refresh:** the Data Warehouse refreshes once a day, so a device that was noncompliant for an hour between two snapshots may be missing from the trend.
+- **Tenant-wide trend:** in the shared training tenant, the compliance trend includes the devices of all participants.
+- **Why the Data Warehouse in Excel:** Microsoft Graph can't serve as a Power Query data source, so Excel uses the Data Warehouse OData feed.
+
+**Background:** "It worked yesterday" is only a claim. The trend shows since when, and the audit log shows the change that matches the time – together they are the evidence for the ticket.
 
 <!-- VERIFY: DeviceComplianceTrend export in the demo tenant: value of ComplianceState and how many days back -->
 <!-- VERIFY: Excel on CL3 (also VERIFY in Exercise 13.2) -->
