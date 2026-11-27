@@ -1,4 +1,6 @@
-# Set MDM Enrollment URL's
+# Autoenroll.ps1 - Intune-TS Exercise 0.1 fallback
+# Writes the Intune MDM URLs to the TenantInfo key of an Entra-joined device and starts auto-enrollment.
+# Run elevated on a client that is joined but missing in Intune.
 
 $key = 'SYSTEM\CurrentControlSet\Control\CloudDomainJoin\TenantInfo\*'
 $keyinfo = Get-Item "HKLM:\$key"
@@ -10,5 +12,5 @@ New-ItemProperty -LiteralPath $path -Name 'MdmEnrollmentUrl' -Value 'https://enr
 New-ItemProperty -LiteralPath $path  -Name 'MdmTermsOfUseUrl' -Value 'https://portal.manage.microsoft.com/TermsofUse.aspx' -PropertyType String -Force -ea SilentlyContinue;
 New-ItemProperty -LiteralPath $path -Name 'MdmComplianceUrl' -Value 'https://portal.manage.microsoft.com/?portalAction=Compliance' -PropertyType String -Force -ea SilentlyContinue;
 
-# Trigger AutoEnroll
+# Start MDM auto-enrollment with the URLs written above
 C:\Windows\system32\deviceenroller.exe /c /AutoEnrollMDM

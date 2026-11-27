@@ -1,92 +1,96 @@
 <#
 .SYNOPSIS
-    Reverse lookup: list every Intune object that is assigned to a given Entra ID group.
+    Group-centric assignment report: shows every Intune object that targets one Entra ID group,
+    device or user.
 
 .DESCRIPTION
-    Intune shows assignments per object, not per group. This script builds the inverse view:
-    for one group it lists every Intune object that includes or excludes the group, directly,
-    through a parent group (nested membership) or through a policy set. Optionally it also lists
-    objects assigned to the virtual targets "All users" / "All devices".
+    The Intune admin center lists assignments object by object. This script turns that around:
+    you name a group (or a device or user) and get every Intune object that includes or excludes it.
+    Assignments are found directly, through parent groups (nested membership) and through policy sets.
+    On request, objects assigned to the virtual targets "All users" and "All devices" are added.
 
-    Covered object types (Microsoft Graph beta, read-only):
-      Configuration : device configuration profiles (incl. Windows update rings, iOS/macOS update
-                      profiles), settings catalog + endpoint security + baselines + EPM + Autopilot
-                      device preparation (configurationPolicies), administrative templates
+    Object types read (Microsoft Graph beta, GET only):
+      Configuration : device configuration profiles (including Windows update rings and iOS/macOS
+                      update profiles), configurationPolicies (settings catalog, endpoint security,
+                      baselines, EPM, Autopilot device preparation), administrative templates
                       (groupPolicyConfigurations), legacy endpoint security intents, BIOS configurations
-      Compliance    : compliance policies, settings catalog compliance policies (e.g. Linux)
-      Scripts       : Windows platform scripts, Remediations, macOS shell scripts, macOS custom attributes
-      Updates       : Windows feature, quality (expedite), quality update policies (hotpatch), driver updates
-      Apps          : app assignments (intent + settings type), app configuration (managed devices and
-                      managed apps), app protection (iOS, Android, Windows), policy sets
-      Enrollment    : enrollment configurations (ESP, platform restrictions, device limit, WHfB,
-                      Windows Backup and Restore, co-management settings), Autopilot deployment
-                      profiles, Apple user-initiated enrollment profiles, terms and conditions,
-                      Company Portal branding profiles
-      RBAC          : Intune role assignments (group as admin members or as scope group),
-                      scope tag auto-assignment to groups
+      Compliance    : compliance policies and settings catalog compliance policies (for example Linux)
+      Scripts       : Windows platform scripts, remediations, macOS shell scripts, macOS custom attributes
+      Updates       : Windows feature updates, expedited quality updates, quality update policies
+                      (hotpatch), driver updates
+      Apps          : app assignments (intent and settings type), app configuration for managed devices
+                      and managed apps, app protection (iOS, Android, Windows), policy sets
+      Enrollment    : enrollment configurations (ESP, platform restrictions, device limit, Windows Hello
+                      for Business, Windows Backup and Restore, co-management settings), Autopilot
+                      deployment profiles, Apple user-initiated enrollment profiles, terms and
+                      conditions, Company Portal branding profiles
+      RBAC          : Intune role assignments (group as admin members or as scope group) and scope tag
+                      auto-assignment to groups
 
-    Every request is GET. Nothing is changed in the tenant.
+    The script only reads. It never changes anything in the tenant.
 
 .PARAMETER GroupName
-    Display name of the Entra ID group. Fails if the name is not unique; use -GroupId then.
+    Entra ID group by display name. If the name is not unique, the script stops - use -GroupId.
 
 .PARAMETER GroupId
-    Object ID of the Entra ID group.
+    Entra ID group by object ID.
 
 .PARAMETER DeviceName
-    Device view: display name of an Entra ID device (e.g. CL5). Uses every group the device is a member
-    of (transitively, assigned and dynamic) plus "All devices". Several Entra objects with the same name
-    (e.g. a stale registration next to the hybrid join) are all included and listed.
+    Device view. Display name of an Entra ID device (for example CL3-yourname). Takes every group the
+    device belongs to (transitively, assigned and dynamic) plus "All devices". If several Entra objects
+    share the name (for example a stale registration next to a hybrid join), all of them are used and listed.
 
 .PARAMETER UserPrincipalName
-    User view: UPN of a user. Uses every group the user is a member of (transitively) plus "All users".
+    User view. UPN of a user. Takes every group the user belongs to (transitively) plus "All users".
 
 .PARAMETER Category
-    One or more of: Configuration, Compliance, Scripts, Updates, Apps, Enrollment, RBAC, All (default).
+    Limit the object types: Configuration, Compliance, Scripts, Updates, Apps, Enrollment, RBAC or
+    All (default). Several values are allowed.
 
 .PARAMETER DirectOnly
-    Group view only: skip parent groups. By default assignments to groups that contain this group
-    (transitively) are listed too. Note: a group view does not show what the group's members get through
-    their other groups (e.g. a dynamic device group). Use -DeviceName / -UserPrincipalName for that.
+    Group view only: ignore parent groups. Without it, assignments to groups that contain this group
+    (transitively) are reported as well. A group view never shows what the members receive through
+    their other groups (a dynamic device group, for example) - use -DeviceName or -UserPrincipalName.
 
 .PARAMETER IncludeAllUsersAllDevices
-    Also list objects assigned to "All users" / "All devices". Only targets that can apply to the group's
-    member types are shown (user members -> All users, device members -> All devices).
+    Add objects assigned to "All users" or "All devices". Only targets that fit the member types of
+    the group are shown (user members: All users, device members: All devices).
 
 .PARAMETER ExportCsv
-    Export the result to CSV (delimiter ';', UTF-8) in -OutputFolder.
+    Write the result as CSV (delimiter ';', UTF-8) to -OutputFolder.
 
 .PARAMETER OutputFolder
-    Folder for the CSV export. Default: current folder.
+    Target folder for the CSV file. Default: the current folder.
 
 .PARAMETER SkipTenantConfirmation
-    Do not ask to confirm the connected tenant.
+    Skip the question that confirms the connected tenant.
 
 .PARAMETER PassThru
-    Return the result objects to the pipeline.
+    Also return the result objects to the pipeline.
 
 .EXAMPLE
-    .\Get-IntunePolicyAssignmentsByGroup.ps1 -GroupName "student1devices"
+    .\Get-IntunePolicyAssignmentsByGroup.ps1 -GroupName "studentXdevices"
 
 .EXAMPLE
-    .\Get-IntunePolicyAssignmentsByGroup.ps1 -DeviceName "CL5" -Category Configuration,Apps
-    Everything targeted at device CL5 through any of its groups or All devices.
+    .\Get-IntunePolicyAssignmentsByGroup.ps1 -DeviceName "CL3-yourname" -Category Configuration,Apps
+    Everything that reaches CL3 through any of its groups or through All devices.
 
 .EXAMPLE
-    .\Get-IntunePolicyAssignmentsByGroup.ps1 -GroupName "student1users" -Category Apps,Compliance -IncludeAllUsersAllDevices -ExportCsv
+    .\Get-IntunePolicyAssignmentsByGroup.ps1 -GroupName "studentXusers" -Category Apps,Compliance -IncludeAllUsersAllDevices -ExportCsv
 
 .EXAMPLE
     $r = .\Get-IntunePolicyAssignmentsByGroup.ps1 -GroupId 00000000-0000-0000-0000-000000000000 -PassThru -SkipTenantConfirmation
 
 .NOTES
-    Version : 2.0 (2026-10-19)
-    Requires: Microsoft.Graph.Authentication 2.x (Invoke-MgGraphRequest with -SkipHttpErrorCheck)
+    Intune-TS lab toolbox - read-only.
+    Needs   : Microsoft.Graph.Authentication 2.x (Invoke-MgGraphRequest with -SkipHttpErrorCheck),
               Windows PowerShell 5.1 or PowerShell 7
     Scopes  : DeviceManagementConfiguration.Read.All, DeviceManagementApps.Read.All,
               DeviceManagementScripts.Read.All, DeviceManagementServiceConfig.Read.All,
               DeviceManagementRBAC.Read.All, GroupMember.Read.All
-    Intune RBAC still applies: objects outside the admin's scope tags are not returned by Graph.
-    Most Intune endpoints used here exist only in Graph beta.
+    Read scopes are enough because every call is a GET.
+    Your Intune role still filters the result: Graph returns no objects outside your scope tags.
+    Most of the Intune endpoints used here are available in Graph beta only.
 #>
 
 [CmdletBinding(DefaultParameterSetName = 'ByName')]
@@ -134,7 +138,7 @@ $RequiredScopes = @(
     'GroupMember.Read.All'
 )
 
-#region Module and connection
+#region Graph module and sign-in
 if (-not (Get-Module -ListAvailable -Name Microsoft.Graph.Authentication)) {
     Write-Host 'Installing Microsoft.Graph.Authentication (CurrentUser)...' -ForegroundColor Yellow
     Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -Force
@@ -161,10 +165,10 @@ if (-not $SkipTenantConfirmation) {
 }
 #endregion
 
-#region Graph helpers
+#region Graph request helpers
 function Invoke-Graph {
-    # GET/POST with status code handling and retry on 429/503/504.
-    # The Graph SDK already retries throttled requests; this loop catches what is left after its retries.
+    # Sends GET or POST, evaluates the status code and retries on 429, 503 and 504.
+    # The Graph SDK has its own retry for throttling; this loop handles whatever is still failing after it.
     param(
         [string]$Uri,
         [string]$Method = 'GET',
@@ -202,7 +206,7 @@ function Invoke-Graph {
 }
 
 function Get-GraphCollection {
-    # Follows @odata.nextLink. Returns Status, Items, Message.
+    # Pages through @odata.nextLink and returns Status, Items and Message.
     param([string]$Uri)
     $items = New-Object System.Collections.Generic.List[object]
     $next = $Uri
@@ -216,9 +220,9 @@ function Get-GraphCollection {
 }
 
 function Invoke-GraphBatchGet {
-    # GET many relative URLs via JSON batching (20 per batch). Throttled sub-requests are retried here,
-    # because SDK retry handlers do not retry requests inside a batch.
-    # Returns hashtable: url -> @{ Status; Body }
+    # Reads many relative URLs through JSON batching, 20 requests per batch. Throttled requests inside a
+    # batch are retried here - the retry handlers of the SDK don't look inside a batch.
+    # Result: hashtable url -> @{ Status; Body }
     param([string[]]$RelativeUrls, [string]$BaseUri = $GraphBeta)
     $results = @{}
     $pending = New-Object System.Collections.Generic.List[string]
@@ -268,7 +272,7 @@ function Get-ShortType([string]$ODataType) {
 }
 #endregion
 
-#region Group / device / user
+#region Resolve group, device or user
 $IsPrincipalView = $PSCmdlet.ParameterSetName -in @('ByDevice', 'ByUser')
 if ($IsPrincipalView) {
     $targetGroups = @{}
@@ -306,7 +310,7 @@ if ($IsPrincipalView) {
         }
     }
     Write-Host "  Groups (transitive): $($targetGroups.Count)" -ForegroundColor Gray
-    # For a single device or user the virtual targets always apply
+    # A single device or user is always covered by the matching virtual target
     $showAllUsers = $userCount -gt 0
     $showAllDevices = $deviceCount -gt 0
 }
@@ -331,7 +335,7 @@ else {
         $group = $r.Items[0]
     }
 
-    # Member types decide which virtual targets (All users / All devices) can reach the group
+    # The member types decide which virtual target (All users or All devices) can reach the group
     $countHeaders = @{ ConsistencyLevel = 'eventual' }
     $userCount = 0; $deviceCount = 0
     try {
@@ -348,7 +352,7 @@ else {
         Write-Host '  Note: group contains users AND devices. Microsoft recommends against mixed groups for Intune assignments.' -ForegroundColor DarkYellow
     }
 
-    # Target set: the group itself plus all groups it is (transitively) a member of
+    # Groups to check: the group itself plus every group it belongs to, transitively
     $targetGroups = @{}
     $targetGroups[$group.id] = 'Direct'
     if (-not $DirectOnly) {
@@ -365,13 +369,13 @@ else {
     $showAllUsers = $IncludeAllUsersAllDevices -and $userCount -gt 0
     $showAllDevices = $IncludeAllUsersAllDevices -and $deviceCount -gt 0
     if ($IncludeAllUsersAllDevices -and ($userCount + $deviceCount) -eq 0) {
-        # Empty group or counting failed: show both rather than hide something
+        # Group is empty or the count failed: rather show both targets than hide one
         $showAllUsers = $true; $showAllDevices = $true
     }
 }
 #endregion
 
-#region Lookups (filters, scope tags, policy sets)
+#region Name lookups: assignment filters, scope tags, policy sets
 Write-Host "`nLoading lookups..." -ForegroundColor Cyan
 $filterLookup = @{}
 $r = Get-GraphCollection -Uri "$GraphBeta/deviceManagement/assignmentFilters?`$select=id,displayName,platform"
@@ -389,12 +393,12 @@ foreach ($ps in $policySetResult.Items) { $policySetLookup[$ps.id] = $ps.display
 Write-Host "  Policy sets: $($policySetLookup.Count)" -ForegroundColor Gray
 #endregion
 
-#region Object catalog
-# Path       : collection below /beta
-# Name       : name property
-# Select     : properties besides id/name (dropped automatically if the endpoint rejects them)
-# Expand     : $true if $expand=assignments works (verified 2026-10-19), otherwise assignments via $batch
-# Filter     : optional $filter
+#region Object types that are read
+# Path   : collection below /beta
+# Name   : property that holds the display name
+# Select : extra properties next to id and name (left out automatically if the endpoint refuses them)
+# Expand : $true where $expand=assignments works (checked 2026-10-19); otherwise assignments come via $batch
+# Filter : optional $filter
 $catalog = @(
     @{ Cat = 'Configuration'; Label = 'Device configuration';           Path = '/deviceManagement/deviceConfigurations';           Name = 'displayName'; Select = 'roleScopeTagIds'; Expand = $true }
     @{ Cat = 'Configuration'; Label = 'Settings catalog';               Path = '/deviceManagement/configurationPolicies';          Name = 'name';        Select = 'roleScopeTagIds,platforms,technologies,templateReference'; Expand = $true; Template = $true }
@@ -460,7 +464,7 @@ if ($Category -notcontains 'All') { $selected = @($catalog | Where-Object { $Cat
 $doRbac = ($Category -contains 'All') -or ($Category -contains 'RBAC')
 #endregion
 
-#region Assignment evaluation
+#region Match assignments against the groups
 $results = New-Object System.Collections.Generic.List[object]
 $skipped = New-Object System.Collections.Generic.List[object]
 
@@ -562,7 +566,7 @@ function Add-Matches($def, $obj, $assignments) {
 }
 #endregion
 
-#region Query
+#region Read objects and assignments
 Write-Host "`nQuerying Intune objects..." -ForegroundColor Cyan
 foreach ($def in $selected) {
     $baseSelect = "id,$($def.Name)"
@@ -574,13 +578,13 @@ foreach ($def in $selected) {
 
     $r = Get-GraphCollection -Uri $uri
     if ($r.Status -eq 400 -and $def.Select) {
-        # A property in $select does not exist on this endpoint (e.g. after an API change): retry minimal
+        # The endpoint refuses a property in $select (an API change, for example): retry with the minimum
         $qs[0] = "`$select=$baseSelect"
         $r = Get-GraphCollection -Uri ("$GraphBeta$($def.Path)?" + ($qs -join '&'))
     }
     $needBatch = -not $def.Expand
     if ($r.Status -eq 400 -and $def.Expand) {
-        # $expand rejected: list objects, then read assignments per object via $batch
+        # $expand refused: list the objects first, then read each object's assignments via $batch
         $qs = @($qs | Where-Object { $_ -ne '$expand=assignments' })
         $r = Get-GraphCollection -Uri ("$GraphBeta$($def.Path)?" + ($qs -join '&'))
         $needBatch = $true
@@ -609,8 +613,8 @@ foreach ($def in $selected) {
 }
 
 if ($doRbac) {
-    # Intune role assignments: group as admin members or as scope group.
-    # Note: $expand=roleDefinition on the list returns null, so matching assignments are read one by one.
+    # Intune role assignments where the group is admin member or scope group.
+    # $expand=roleDefinition returns null on the list, so matching assignments are read one at a time.
     $r = Get-GraphCollection -Uri "$GraphBeta/deviceManagement/roleAssignments?`$select=id,displayName,members,scopeMembers,scopeType"
     if ($r.Status -ne 200) {
         $skipped.Add([PSCustomObject]@{ ObjectType = 'Intune role assignment'; Reason = "HTTP $($r.Status)"; Message = $r.Message })
@@ -649,7 +653,7 @@ if ($doRbac) {
         Write-Host ("  {0,-40} {1,5} objects" -f 'Intune role assignment', $r.Items.Count) -ForegroundColor Gray
     }
 
-    # Scope tags assigned to groups (devices in the group get the tag automatically)
+    # Scope tags assigned to groups - devices in such a group receive the tag automatically
     if ($scopeTagResult.Status -eq 200 -and $scopeTagResult.Items.Count -gt 0) {
         $urls = @($scopeTagResult.Items | ForEach-Object { "/deviceManagement/roleScopeTags/$($_.id)/assignments" })
         $batch = Invoke-GraphBatchGet -RelativeUrls $urls
@@ -679,7 +683,7 @@ if ($doRbac) {
 }
 #endregion
 
-#region Output
+#region Result and export
 $sorted = @($results | Sort-Object Category, ObjectType, Name)
 $include = @($sorted | Where-Object { $_.Mode -ne 'Exclude' -and $_.Via -notmatch '^All (users|devices)' })
 $exclude = @($sorted | Where-Object { $_.Mode -eq 'Exclude' })

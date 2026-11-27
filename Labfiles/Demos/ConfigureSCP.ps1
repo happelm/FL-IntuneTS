@@ -1,23 +1,21 @@
+# ConfigureSCP.ps1 - trainer demo, hybrid join in the trainer pod
+# Writes the service connection point (SCP) for Microsoft Entra hybrid join to the current forest,
+# based on the SCP sample in the Microsoft documentation.
 #
-# ConfigureSCP.ps1
-# Configures the service connection point (SCP) for Microsoft Entra hybrid join in the current forest.
+# Run as Enterprise Admin of the forest.
 #
-# REQUIREMENT: Must be run by an Enterprise Admin of the current forest.
-#
-# EXAMPLES:
+# Usage:
 #   .\ConfigureSCP.ps1 -Domain contoso.com -TenantId <guid>
 #   .\ConfigureSCP.ps1 -Domain contoso.onmicrosoft.com -TenantId <guid>
-#
 [CmdletBinding()]
 param(
-    # Verified domain used for device authentication.
-    # If you use federation, enter a federated domain name.
-    # Otherwise, enter your primary *.onmicrosoft.com domain name.
+    # Verified domain the devices authenticate against:
+    # a federated domain if you federate, otherwise the primary *.onmicrosoft.com domain.
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
     [string]$Domain,
 
-# Microsoft Entra tenant identifier (GUID).
+# Tenant ID of Microsoft Entra ID (GUID).
     [Parameter(Mandatory = $true)]
     [guid]$TenantId
 )
@@ -27,7 +25,7 @@ $ErrorActionPreference = "Stop"
 Write-Output "Configuring the SCP for Microsoft Entra hybrid join in your Active Directory forest."
 
 try {
-    ## Set variables
+    ## Values for the SCP keywords attribute
     $azureADName = "azureADName:" + $Domain.Trim()
     $azureADId   = "azureADId:" + $TenantId.ToString()
     $keywords    = "keywords"
@@ -39,7 +37,7 @@ $rootDSE    = New-Object System.DirectoryServices.DirectoryEntry($ldap + "RootDS
     $drcCN      = "CN=Device Registration Configuration," + $servicesCN
     $scpCN      = "CN=62a0ff2e-97b9-4513-943f-0d221bd30080," + $drcCN
 
-## Get/Create: CN=Device Registration Configuration,CN=Services
+## Container CN=Device Registration Configuration,CN=Services - reuse or create
     if ([System.DirectoryServices.DirectoryEntry]::Exists($ldap + $drcCN)) {
         $deDRC = New-Object System.DirectoryServices.DirectoryEntry($ldap + $drcCN)
     }
@@ -49,7 +47,7 @@ $rootDSE    = New-Object System.DirectoryServices.DirectoryEntry($ldap + "RootDS
         $deDRC.CommitChanges()
     }
 
-## Edit/Create: CN=62a0ff2e-97b9-4513-943f-0d221bd30080,CN=Device Registration Configuration,CN=Services
+## SCP object CN=62a0ff2e-97b9-4513-943f-0d221bd30080 - clear and reuse, or create
     if ([System.DirectoryServices.DirectoryEntry]::Exists($ldap + $scpCN)) {
         $deSCP = New-Object System.DirectoryServices.DirectoryEntry($ldap + $scpCN)
         $deSCP.Properties[$keywords].Clear()

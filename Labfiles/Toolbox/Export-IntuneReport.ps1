@@ -1,70 +1,71 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Exports an Intune report with the Microsoft Graph exportJobs API and saves it as CSV (ready for Excel).
+    Pulls an Intune report through the Microsoft Graph exportJobs API and stores it as a CSV file
+    that Excel opens with columns.
 
 .DESCRIPTION
-    The Intune reports that run on the Intune reporting infrastructure are exported in three steps:
+    Reports that run on the Intune reporting infrastructure are exported in three steps:
       1. POST /deviceManagement/reports/exportJobs with reportName, select, filter and format.
-      2. GET the job until status is "completed".
-      3. Download the ZIP from the job's url (a time-limited SAS link) and extract the CSV.
+      2. GET the job until its status is "completed".
+      3. Download the ZIP from the job's url (a SAS link that expires) and unpack the CSV.
 
-    This script runs the three steps for a preset from ReportPresets.json or for any reportName.
-    The CSV is converted to the list separator of the current culture so that Excel opens it with columns
-    (in German Windows: semicolon). The original file from Intune is kept as *_raw.csv.
+    The script runs these steps for a preset from ReportPresets.json or for any reportName you pass.
+    It rewrites the CSV with the list separator of the current culture, so Excel splits the columns
+    right away (semicolon on German Windows). The file as delivered by Intune stays as *_raw.csv.
 
-    Always pass the columns explicitly (preset or -Select): Microsoft recommends not to build automation
-    on the default columns of a report.
+    Name the columns every time (through the preset or -Select): Microsoft advises against automation
+    that relies on the default columns of a report.
 
 .PARAMETER Preset
-    Name of a preset in ReportPresets.json. -ListPresets shows them.
+    A preset from ReportPresets.json. -ListPresets lists them.
 
 .PARAMETER ReportName
-    Any reportName from the Learn list (instead of -Preset). Use -Select to choose the columns.
+    Any reportName from the Learn list, as an alternative to -Preset. Choose the columns with -Select.
 
 .PARAMETER Select
-    Columns. With -Preset it replaces the preset's columns.
+    The columns to export. Together with -Preset it overrides the preset's columns.
 
 .PARAMETER Filter
-    Report filter, e.g. "(OwnerType eq '1')". With -Preset it replaces the preset's filter.
+    Report filter, for example "(OwnerType eq '1')". Together with -Preset it overrides the preset's filter.
 
 .PARAMETER PolicyId
-    Replaces {PolicyId} in the preset filter (RemediationResults, FeatureUpdateDeviceState).
+    Value for {PolicyId} in the preset filter (RemediationResults, FeatureUpdateDeviceState).
 
 .PARAMETER ApplicationId
-    Replaces {ApplicationId} in the preset filter (AppInstallStatusByDevice).
+    Value for {ApplicationId} in the preset filter (AppInstallStatusByDevice).
 
 .PARAMETER LocalizationType
-    ReplaceLocalizableValues (default here: readable values such as "Windows" instead of codes) or
-    LocalizedValuesAsAdditionalColumn (code column plus *_loc column). The reports Devices and
-    DevicesWithInventory ignore this parameter.
+    ReplaceLocalizableValues (default in this script: readable values such as "Windows" instead of
+    codes) or LocalizedValuesAsAdditionalColumn (code column plus a *_loc column). The reports Devices
+    and DevicesWithInventory don't use this parameter.
 
 .PARAMETER OutputFolder
-    Folder for the CSV files. Default: .\ReportExports next to the current location.
+    Target folder for the CSV files. Default: .\ReportExports below the current location.
 
 .PARAMETER Delimiter
-    Delimiter of the converted CSV. Default: list separator of the current culture.
+    Delimiter of the rewritten CSV. Default: the list separator of the current culture.
 
 .PARAMETER TimeoutMinutes
-    How long to wait for the export job. Default 10.
+    Maximum wait for the export job. Default 10.
 
 .PARAMETER ListPresets
-    Show the presets and exit.
+    List the presets and stop.
 
 .PARAMETER PassThru
-    Return the rows as objects.
+    Also return the rows as objects.
 
 .PARAMETER TenantId
-    Optional. Without it the tenant comes from the interactive sign-in.
+    Optional. Without it, the tenant is taken from the interactive sign-in.
 
 .PARAMETER SkipTenantConfirmation
-    Do not ask to confirm the connected tenant.
+    Skip the question that confirms the connected tenant.
 
 .EXAMPLE
     .\Export-IntuneReport.ps1 -ListPresets
 
 .EXAMPLE
-    .\Export-IntuneReport.ps1 -Preset Devices
+    .\Export-IntuneReport.ps1 -Preset DeviceCompliance
 
 .EXAMPLE
     .\Export-IntuneReport.ps1 -Preset RemediationResults -PolicyId 00000000-0000-0000-0000-000000000000
@@ -73,11 +74,11 @@
     .\Export-IntuneReport.ps1 -ReportName DeviceCompliance -Select DeviceName,ComplianceState,UPN -Filter "(ComplianceState eq '2')"
 
 .NOTES
-    Version : 1.0 (2026-10-29)
-    Requires: Microsoft.Graph.Authentication 2.x, Windows PowerShell 5.1 or PowerShell 7
-    Scope   : DeviceManagementConfiguration.ReadWrite.All (creating an export job needs a ReadWrite scope
-              according to the Graph reference; the job itself changes nothing in the tenant)
-    Throttling (Learn): up to 8 export requests per user per minute, 100 per tenant per minute.
+    Intune-TS lab toolbox.
+    Needs   : Microsoft.Graph.Authentication 2.x, Windows PowerShell 5.1 or PowerShell 7
+    Scope   : DeviceManagementConfiguration.ReadWrite.All - the Graph reference requires a ReadWrite
+              scope to create an export job, although the job changes nothing in the tenant
+    Limits  : up to 8 export requests per user per minute and 100 per tenant per minute (Learn)
     Sources : https://learn.microsoft.com/intune/device-management/reports/export-graph-apis
               https://learn.microsoft.com/intune/device-management/reports/ref-graph-available-reports
 #>
@@ -148,7 +149,7 @@ function Write-Step {
     Write-Host ('[{0}] {1}' -f (Get-Date -Format 'HH:mm:ss'), $Message) -ForegroundColor Cyan
 }
 
-# --- 1. Request definition -----------------------------------------------------------------
+# === Step 1: build the request ====================================================
 $presets = @()
 if (Test-Path $presetFile) { $presets = @((Get-Content -Path $presetFile -Raw | ConvertFrom-Json).presets) }
 
@@ -189,7 +190,7 @@ $body = [ordered]@{
 if ($columns) { $body.select = @($columns) }
 if ($reportFilter) { $body.filter = $reportFilter }
 
-# --- 2. Sign-in ---------------------------------------------------------------------------
+# === Step 2: sign in to Microsoft Graph ===========================================
 if (-not (Get-Module -ListAvailable -Name Microsoft.Graph.Authentication)) {
     Write-Step 'Installing Microsoft.Graph.Authentication (CurrentUser)'
     Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -Force -AllowClobber
@@ -205,7 +206,7 @@ if (-not $SkipTenantConfirmation) {
     if ($answer -notmatch '^(y|yes)$') { Write-Warning 'Aborted.'; return }
 }
 
-# --- 3. Export job ----------------------------------------------------------------------------
+# === Step 3: create the export job and wait for it ================================
 Write-Step "Requesting export job for $report"
 Write-Verbose ($body | ConvertTo-Json -Depth 5)
 $job = Invoke-MgGraphRequest -Method POST -Uri "$GraphBase/deviceManagement/reports/exportJobs" -Body ($body | ConvertTo-Json -Depth 5) -ContentType 'application/json' -OutputType PSObject
@@ -220,14 +221,14 @@ do {
 } while ($job.status -ne 'completed' -and (Get-Date) -lt $deadline)
 if ($job.status -ne 'completed') { throw "Export job did not complete within $TimeoutMinutes minutes (last status: $($job.status))." }
 
-# --- 4. Download and convert ------------------------------------------------------------------
+# === Step 4: download the ZIP and rewrite the CSV =================================
 New-Item -Path $OutputFolder -ItemType Directory -Force | Out-Null
 $stamp   = Get-Date -Format 'yyyyMMdd-HHmmss'
 $zipPath = Join-Path $OutputFolder "$name`_$stamp.zip"
 $tmp     = Join-Path $OutputFolder "_extract_$stamp"
 
 Write-Step 'Downloading'
-# The url is a SAS link to Azure Storage: no Graph token is sent
+# The url points to Azure Storage with a SAS token, so no Graph token goes along
 Invoke-WebRequest -Uri $job.url -OutFile $zipPath -UseBasicParsing
 Expand-Archive -Path $zipPath -DestinationPath $tmp -Force
 $extracted = Get-ChildItem -Path $tmp -File | Select-Object -First 1
@@ -240,7 +241,7 @@ Remove-Item -Path $tmp -Recurse -Force
 Remove-Item -Path $zipPath -Force
 
 $rows = @(Import-Csv -Path $rawPath)
-# UTF-8 with BOM so that Excel shows umlauts correctly (PS 5.1: UTF8 = with BOM; PS 7: utf8BOM)
+# Write UTF-8 with BOM so Excel displays umlauts correctly (PS 5.1: UTF8 includes the BOM; PS 7: utf8BOM)
 $enc = if ($PSVersionTable.PSVersion.Major -ge 6) { 'utf8BOM' } else { 'UTF8' }
 $rows | Export-Csv -Path $csvPath -Delimiter $Delimiter -NoTypeInformation -Encoding $enc
 

@@ -1,39 +1,42 @@
 <#
 .SYNOPSIS
-    Finds Intune objects that apply to nobody: no assignment, exclusions only, or only groups that no longer exist.
+    Lists Intune objects that reach nobody: unassigned, exclusions only, or assigned only to deleted groups.
 
 .DESCRIPTION
-    The Intune portal shows assignments per object and per object type, so forgotten objects are hard to
-    spot. This script reads all supported object types and reports every object that is
-      Unassigned       : no assignment at all
-      ExcludeOnly      : only exclusion assignments, no include
-      DeletedGroupsOnly: every include targets a group that no longer exists in Entra ID
-      SomeDeletedGroups: at least one include or exclusion targets a deleted group (object still applies elsewhere)
+    In the Intune admin center you see assignments per object and per object type, which makes
+    forgotten objects easy to miss. This script reads every supported object type and reports each
+    object with one of these findings:
+      Unassigned       : the object has no assignment
+      ExcludeOnly      : the object has exclusions but no include
+      DeletedGroupsOnly: every include points to a group that no longer exists in Entra ID
+      SomeDeletedGroups: at least one include or exclusion points to a deleted group
+                         (the object still applies through its other assignments)
 
-    The ScopeTags column shows which Intune admins can see and change each finding, which helps
-    when reviewing RBAC.
+    The ScopeTags column tells you which Intune admins can see and edit a finding - useful for an
+    RBAC review.
 
-    Every request is GET (plus POST $batch for GETs). Nothing is changed in the tenant.
-    Default objects that apply implicitly (default enrollment configurations, the default Company Portal
-    branding profile) are skipped.
+    The script only reads (GET, plus POST $batch that carries GET requests). Nothing in the tenant
+    changes. Default objects that apply without an assignment (default enrollment configurations,
+    the default Company Portal branding profile) are left out.
 
 .PARAMETER Category
-    One or more of: Configuration, Compliance, Scripts, Updates, Apps, Enrollment, All (default).
+    Limit the object types: Configuration, Compliance, Scripts, Updates, Apps, Enrollment or All
+    (default). Several values are allowed.
 
 .PARAMETER Status
-    Which findings to show: Unassigned, ExcludeOnly, DeletedGroupsOnly, SomeDeletedGroups. Default: all.
+    Limit the findings: Unassigned, ExcludeOnly, DeletedGroupsOnly, SomeDeletedGroups. Default: all.
 
 .PARAMETER ExportCsv
-    Export the result to CSV (delimiter ';', UTF-8) in -OutputFolder.
+    Write the result as CSV (delimiter ';', UTF-8) to -OutputFolder.
 
 .PARAMETER OutputFolder
-    Folder for the CSV export. Default: current folder.
+    Target folder for the CSV file. Default: the current folder.
 
 .PARAMETER SkipTenantConfirmation
-    Do not ask to confirm the connected tenant.
+    Skip the question that confirms the connected tenant.
 
 .PARAMETER PassThru
-    Return the result objects to the pipeline.
+    Also return the result objects to the pipeline.
 
 .EXAMPLE
     .\Find-UnassignedIntuneObjects.ps1
@@ -46,14 +49,14 @@
     $r | Where-Object ScopeTags -eq 'Default' | Format-Table ObjectType, Name
 
 .NOTES
-    Version : 1.0 (2026-10-25)
-    Requires: Microsoft.Graph.Authentication 2.x (Invoke-MgGraphRequest with -SkipHttpErrorCheck)
+    Intune-TS lab toolbox - read-only.
+    Needs   : Microsoft.Graph.Authentication 2.x (Invoke-MgGraphRequest with -SkipHttpErrorCheck),
               Windows PowerShell 5.1 or PowerShell 7
     Scopes  : DeviceManagementConfiguration.Read.All, DeviceManagementApps.Read.All,
               DeviceManagementScripts.Read.All, DeviceManagementServiceConfig.Read.All,
               DeviceManagementRBAC.Read.All, GroupMember.Read.All
-    Object catalog and Graph helpers are shared with Get-IntunePolicyAssignmentsByGroup.ps1.
-    Intune RBAC still applies: objects outside the admin's scope tags are not returned by Graph.
+    Uses the same object catalog and Graph helpers as Get-IntunePolicyAssignmentsByGroup.ps1.
+    Your Intune role still filters the result: Graph returns no objects outside your scope tags.
 #>
 
 [CmdletBinding()]
@@ -86,7 +89,7 @@ $RequiredScopes = @(
     'GroupMember.Read.All'
 )
 
-#region Module and connection
+#region Graph module and sign-in
 if (-not (Get-Module -ListAvailable -Name Microsoft.Graph.Authentication)) {
     Write-Host 'Installing Microsoft.Graph.Authentication (CurrentUser)...' -ForegroundColor Yellow
     Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -Force
@@ -113,10 +116,10 @@ if (-not $SkipTenantConfirmation) {
 }
 #endregion
 
-#region Graph helpers
+#region Graph request helpers
 function Invoke-Graph {
-    # GET/POST with status code handling and retry on 429/503/504.
-    # The Graph SDK already retries throttled requests; this loop catches what is left after its retries.
+    # Sends GET or POST, evaluates the status code and retries on 429, 503 and 504.
+    # The Graph SDK has its own retry for throttling; this loop handles whatever is still failing after it.
     param(
         [string]$Uri,
         [string]$Method = 'GET',
@@ -154,7 +157,7 @@ function Invoke-Graph {
 }
 
 function Get-GraphCollection {
-    # Follows @odata.nextLink. Returns Status, Items, Message.
+    # Pages through @odata.nextLink and returns Status, Items and Message.
     param([string]$Uri)
     $items = New-Object System.Collections.Generic.List[object]
     $next = $Uri
@@ -168,9 +171,9 @@ function Get-GraphCollection {
 }
 
 function Invoke-GraphBatchGet {
-    # GET many relative URLs via JSON batching (20 per batch). Throttled sub-requests are retried here,
-    # because SDK retry handlers do not retry requests inside a batch.
-    # Returns hashtable: url -> @{ Status; Body }
+    # Reads many relative URLs through JSON batching, 20 requests per batch. Throttled requests inside a
+    # batch are retried here - the retry handlers of the SDK don't look inside a batch.
+    # Result: hashtable url -> @{ Status; Body }
     param([string[]]$RelativeUrls, [string]$BaseUri = $GraphBeta)
     $results = @{}
     $pending = New-Object System.Collections.Generic.List[string]
@@ -220,7 +223,7 @@ function Get-ShortType([string]$ODataType) {
 }
 #endregion
 
-#region Lookups (filters, scope tags, policy sets)
+#region Name lookups: assignment filters, scope tags, policy sets
 Write-Host "`nLoading lookups..." -ForegroundColor Cyan
 $filterLookup = @{}
 $r = Get-GraphCollection -Uri "$GraphBeta/deviceManagement/assignmentFilters?`$select=id,displayName,platform"
@@ -238,12 +241,12 @@ foreach ($ps in $policySetResult.Items) { $policySetLookup[$ps.id] = $ps.display
 Write-Host "  Policy sets: $($policySetLookup.Count)" -ForegroundColor Gray
 #endregion
 
-#region Object catalog
-# Path       : collection below /beta
-# Name       : name property
-# Select     : properties besides id/name (dropped automatically if the endpoint rejects them)
-# Expand     : $true if $expand=assignments works (verified 2026-10-19), otherwise assignments via $batch
-# Filter     : optional $filter
+#region Object types that are read
+# Path   : collection below /beta
+# Name   : property that holds the display name
+# Select : extra properties next to id and name (left out automatically if the endpoint refuses them)
+# Expand : $true where $expand=assignments works (checked 2026-10-19); otherwise assignments come via $batch
+# Filter : optional $filter
 $catalog = @(
     @{ Cat = 'Configuration'; Label = 'Device configuration';           Path = '/deviceManagement/deviceConfigurations';           Name = 'displayName'; Select = 'roleScopeTagIds'; Expand = $true }
     @{ Cat = 'Configuration'; Label = 'Settings catalog';               Path = '/deviceManagement/configurationPolicies';          Name = 'name';        Select = 'roleScopeTagIds,platforms,technologies,templateReference'; Expand = $true; Template = $true }
@@ -329,13 +332,13 @@ function Get-ObjectTypeLabel($def, $obj) {
 }
 
 function Test-ImplicitDefault($def, $obj) {
-    # Objects that apply without an assignment
+    # Default objects that apply even without an assignment
     if ($def.Path -like '*deviceEnrollmentConfigurations' -and "$($obj.priority)" -eq '0') { return $true }
     if ($def.Path -like '*intuneBrandingProfiles' -and $obj.isDefaultProfile) { return $true }
     return $false
 }
 
-#region Query
+#region Read objects and assignments
 $found = New-Object System.Collections.Generic.List[object]   # objects with their assignments
 $skipped = New-Object System.Collections.Generic.List[object]
 
@@ -382,8 +385,8 @@ foreach ($def in $selected) {
 }
 #endregion
 
-#region Deleted groups
-# Collect every group ID used in an assignment and check which ones still exist
+#region Groups that no longer exist
+# Gather every group ID used in an assignment and check which of them still exist
 $groupIds = @{}
 foreach ($f in $found) {
     foreach ($a in $f.Assignments) {
@@ -406,7 +409,7 @@ if ($groupIds.Count -gt 0) {
 }
 #endregion
 
-#region Evaluation
+#region Classify the findings
 $results = New-Object System.Collections.Generic.List[object]
 foreach ($f in $found) {
     $def = $f.Def; $obj = $f.Obj
@@ -456,7 +459,7 @@ foreach ($f in $found) {
 }
 #endregion
 
-#region Output
+#region Result and export
 $order = @{ Unassigned = 1; ExcludeOnly = 2; DeletedGroupsOnly = 3; SomeDeletedGroups = 4 }
 $sorted = @($results | Sort-Object { $order[$_.Status] }, Category, ObjectType, Name)
 
