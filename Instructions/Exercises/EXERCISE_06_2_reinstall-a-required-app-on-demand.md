@@ -4,7 +4,7 @@ redirect_from:
 title: 'Exercise 6.2 – Reinstall a required app on demand'
 lab:
     title: 'Exercise 6.2 – Reinstall a required app on demand'
-    module: 'Day 2 – Apps, protect, support'
+    module: 'Day 2 – Troubleshooting apps, compliance and security'
 ---
 
 # Exercise 6.2 – Reinstall a required app on demand

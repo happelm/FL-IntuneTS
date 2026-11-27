@@ -13,7 +13,7 @@ Lab instructions for the three-day Intune-TS troubleshooting workshop.
 
 ## Exercises
 
-### Day 1 – Method, enroll, configure
+### Day 1 – Troubleshooting enrollment and configuration
 
 Troubleshooting method and service-side tools, log files, registration and enrollment, RBAC, policy processing and conflicts.
 
@@ -24,7 +24,7 @@ Troubleshooting method and service-side tools, log files, registration and enrol
 | 3.1 | [Prove join and enrollment](Instructions/Exercises/EXERCISE_03_1_prove-join-and-enrollment.md) | 25 min |
 | 4.1 | [Follow a policy into the registry](Instructions/Exercises/EXERCISE_04_1_follow-a-policy-into-the-registry.md) | 30 min |
 
-### Day 2 – Apps, protect, support
+### Day 2 – Troubleshooting apps, compliance and security
 
 App deployment and the Intune Management Extension, scripts and remediations, compliance and Conditional Access, SSO and Microsoft Entra Kerberos, legacy management conflicts (demo), support, retire and community tools, endpoint security and Microsoft Defender for Endpoint on the client.
 

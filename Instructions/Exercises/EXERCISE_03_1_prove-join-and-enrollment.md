@@ -4,7 +4,7 @@ redirect_from:
 title: 'Exercise 3.1 – Prove join and enrollment'
 lab:
     title: 'Exercise 3.1 – Prove join and enrollment'
-    module: 'Day 1 – Method, enroll, configure'
+    module: 'Day 1 – Troubleshooting enrollment and configuration'
 ---
 
 # Exercise 3.1 – Prove join and enrollment

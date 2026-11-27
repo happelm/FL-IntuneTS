@@ -4,7 +4,7 @@ redirect_from:
 title: 'Exercise 7.1 – Break and repair compliance'
 lab:
     title: 'Exercise 7.1 – Break and repair compliance'
-    module: 'Day 2 – Apps, protect, support'
+    module: 'Day 2 – Troubleshooting apps, compliance and security'
 ---
 
 # Exercise 7.1 – Break and repair compliance

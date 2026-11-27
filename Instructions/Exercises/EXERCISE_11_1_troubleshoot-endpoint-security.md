@@ -4,7 +4,7 @@ redirect_from:
 title: 'Exercise 11.1 – Troubleshoot endpoint security'
 lab:
     title: 'Exercise 11.1 – Troubleshoot endpoint security'
-    module: 'Day 2 – Apps, protect, support'
+    module: 'Day 2 – Troubleshooting apps, compliance and security'
 ---
 
 # Exercise 11.1 – Troubleshoot endpoint security

@@ -4,7 +4,7 @@ redirect_from:
 title: 'Exercise 4.1 – Follow a policy into the registry'
 lab:
     title: 'Exercise 4.1 – Follow a policy into the registry'
-    module: 'Day 1 – Method, enroll, configure'
+    module: 'Day 1 – Troubleshooting enrollment and configuration'
 ---
 
 # Exercise 4.1 – Follow a policy into the registry

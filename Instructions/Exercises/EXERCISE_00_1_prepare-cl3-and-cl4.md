@@ -4,7 +4,7 @@ redirect_from:
 title: 'Exercise 0.1 – Prepare CL3 and CL4'
 lab:
     title: 'Exercise 0.1 – Prepare CL3 and CL4'
-    module: 'Day 1 – Method, enroll, configure'
+    module: 'Day 1 – Troubleshooting enrollment and configuration'
 ---
 
 # Exercise 0.1 – Prepare CL3 and CL4

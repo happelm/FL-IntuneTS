@@ -4,7 +4,7 @@ redirect_from:
 title: 'Exercise 8.1 – Reach file shares with Windows Hello'
 lab:
     title: 'Exercise 8.1 – Reach file shares with Windows Hello'
-    module: 'Day 2 – Apps, protect, support'
+    module: 'Day 2 – Troubleshooting apps, compliance and security'
 ---
 
 # Exercise 8.1 – Reach file shares with Windows Hello

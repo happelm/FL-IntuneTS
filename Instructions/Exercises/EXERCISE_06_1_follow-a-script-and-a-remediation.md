@@ -4,7 +4,7 @@ redirect_from:
 title: 'Exercise 6.1 – Follow a script and a remediation'
 lab:
     title: 'Exercise 6.1 – Follow a script and a remediation'
-    module: 'Day 2 – Apps, protect, support'
+    module: 'Day 2 – Troubleshooting apps, compliance and security'
 ---
 
 # Exercise 6.1 – Follow a script and a remediation
